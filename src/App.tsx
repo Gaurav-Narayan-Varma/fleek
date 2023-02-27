@@ -26,7 +26,14 @@ function App() {
   function handleClick(e: MouseEvent<HTMLDivElement>) {
     const target = e.target as HTMLElement;
     if (target.textContent != null) {
-      setStage(stageMap[target.textContent])
+      let s = target.textContent
+
+      // Remove number tag if it's present
+      if (target.textContent.includes('(')) {
+        const w = s.split(' ').slice(0, -1)
+        s = w.join(' ')
+      }
+      setStage(stageMap[s])
     }
   }
 
@@ -65,20 +72,23 @@ function App() {
       .catch(error => console.error(error))
     })
   }, [trackers])
-  
+
+  let f = parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'pending'}}}).length
+  console.log(f)
+
   return (
     <div className="App">
       <PageContainer>
         <TrackingBar>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'All'}>All {stage}</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Pending'}>Pending</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Info. Received'}>Info. Received</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'In Transit'}>In Transit</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Out for Delivery'}>Out for Delivery</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Failed Attempt'}>Failed Attempt</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Available for Pickup'}>Available for Pickup</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Delivered'}>Delivered</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Exception'}>Exception</Stage>
+          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'All'}>All {`(${parcels.length})`}</Stage>
+          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Pending'}>Pending {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'pending'}}}).length})`}</Stage>
+          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Info. Received'}>Info. Received {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'info_received'}}}).length})`}</Stage>
+          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'In Transit'}>In Transit {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'in_transit'}}}).length})`}</Stage>
+          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Out for Delivery'}>Out for Delivery {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'out_for_delivery'}}}).length})`}</Stage>
+          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Failed Attempt'}>Failed Attempt {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'failed_attempt'}}}).length})`}</Stage>
+          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Available for Pickup'}>Available for Pickup {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'available_for_pickup'}}}).length})`}</Stage>
+          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Delivered'}>Delivered {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'delivered'}}}).length})`}</Stage>
+          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Exception'}>Exception {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'exception'}}}).length})`}</Stage>
         </TrackingBar>
         <ParcelStack>
           <ParcelHeader>
