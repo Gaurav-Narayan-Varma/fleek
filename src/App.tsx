@@ -1,9 +1,17 @@
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
 import styled from 'styled-components'
 import { MouseEvent } from 'react';
 import React from 'react';
+import { DetailedHTMLProps, TdHTMLAttributes } from 'react';
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      td: DetailedHTMLProps<TdHTMLAttributes<HTMLTableDataCellElement>, HTMLTableDataCellElement>;
+    }
+  }
+}
 
 const stageMap: {[key: string]: string} = {
   'All': 'all',
@@ -18,23 +26,38 @@ const stageMap: {[key: string]: string} = {
 };
 
 function App() {
-  const [trackers, setTrackers] = useState<{ trackerId: string }[]>([])
+  const [trackers, setTrackers] = useState<{ trackerId: string, trackingNumber: string }[]>([])
   const [parcels, setParcels] = useState<React.ReactNode[]>([])
   const [stage, setStage] = useState<string>('all')
+  const [modal, setModal] = useState<boolean>(false)
 
-  
-  function handleClick(e: MouseEvent<HTMLDivElement>) {
-    const target = e.target as HTMLElement;
-    if (target.textContent != null) {
-      let s = target.textContent
+  function handleStageClick(e: MouseEvent<HTMLDivElement>) {
+    if (e.currentTarget.textContent != null) {
+      let s = e.currentTarget.textContent
 
       // Remove number tag if it's present
-      if (target.textContent.includes('(')) {
+      if (e.currentTarget.textContent.includes('(')) {
         const w = s.split(' ').slice(0, -1)
         s = w.join(' ')
       }
       setStage(stageMap[s])
     }
+  }
+
+  function handleParcelClick() {
+    setModal(true)
+  }
+
+  function handleMouseEnter(e: MouseEvent<HTMLDivElement>) {
+    e.currentTarget.style.cursor = 'pointer';
+  };
+
+  function handleMouseLeave(e: MouseEvent<HTMLDivElement>) {
+    e.currentTarget.style.cursor = 'default';
+  };
+
+  function closeModal() {
+    setModal(false)
   }
 
   // Fetching all trackers
@@ -61,8 +84,8 @@ function App() {
       })
       .then(response => response.json())
       .then(data => {
-        setParcels(parcels => [...parcels, <Parcel key={Math.random()}>
-          <TrackerID>{data.data.trackings[0].tracker.trackerId}</TrackerID>
+        setParcels(parcels => [...parcels, <Parcel onClick={handleParcelClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} key={Math.random()}>
+          <TrackerID>{data.data.trackings[0].tracker.trackingNumber}</TrackerID>
           <StatusMilestone>{data.data.trackings[0].shipment.statusMilestone}</StatusMilestone>
           <OriginCountryCode>{data.data.trackings[0].shipment.originCountryCode}</OriginCountryCode>
           <DestinationCountryCode>{data.data.trackings[0].shipment.destinationCountryCode}</DestinationCountryCode>
@@ -73,26 +96,33 @@ function App() {
     })
   }, [trackers])
 
-  let f = parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'pending'}}}).length
-  console.log(f)
-
   return (
     <div className="App">
       <PageContainer>
+        { modal && 
+          <Modal>
+            <Overlay onClick={closeModal}/>
+            <ModalContent>
+              <CloseButton onClick={closeModal}>
+                X
+              </CloseButton>
+            </ModalContent>
+          </Modal>
+        }
         <TrackingBar>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'All'}>All {`(${parcels.length})`}</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Pending'}>Pending {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'pending'}}}).length})`}</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Info. Received'}>Info. Received {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'info_received'}}}).length})`}</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'In Transit'}>In Transit {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'in_transit'}}}).length})`}</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Out for Delivery'}>Out for Delivery {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'out_for_delivery'}}}).length})`}</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Failed Attempt'}>Failed Attempt {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'failed_attempt'}}}).length})`}</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Available for Pickup'}>Available for Pickup {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'available_for_pickup'}}}).length})`}</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Delivered'}>Delivered {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'delivered'}}}).length})`}</Stage>
-          <Stage onClick={(e) => handleClick(e)} stage={stage} text={'Exception'}>Exception {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'exception'}}}).length})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'All'}>All {`(${parcels.length})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Pending'}>Pending {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'pending'}}}).length})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Info. Received'}>Info. Received {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'info_received'}}}).length})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'In Transit'}>In Transit {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'in_transit'}}}).length})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Out for Delivery'}>Out for Delivery {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'out_for_delivery'}}}).length})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Failed Attempt'}>Failed Attempt {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'failed_attempt'}}}).length})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Available for Pickup'}>Available for Pickup {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'available_for_pickup'}}}).length})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Delivered'}>Delivered {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'delivered'}}}).length})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Exception'}>Exception {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'exception'}}}).length})`}</Stage>
         </TrackingBar>
         <ParcelStack>
           <ParcelHeader>
-            <TrackerID>Tracker ID</TrackerID>
+            <TrackerID>Tracking Number</TrackerID>
             <ParcelSubHeader>
               <StatusMilestone>Status</StatusMilestone>
               <OriginCountryCode>Origin</OriginCountryCode>
@@ -108,12 +138,72 @@ function App() {
             }
           })}
         </ParcelStack>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Gender</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Anom</td>
+              <td>19</td>
+              <td>Male</td>
+            </tr>
+            <tr>
+              <td>Megha</td>
+              <td>19</td>
+              <td>Female</td>
+            </tr>
+            <tr>
+              <td>Subham</td>
+              <td>25</td>
+              <td>Male</td>
+            </tr>
+          </tbody>
+        </table>
       </PageContainer>
     </div>
   )
 }
 
 export default App
+
+const Modal = styled.div`
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.7);
+`
+
+const ModalContent = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 50%;
+  width: 50%;
+  background-color: white;
+`
+const CloseButton = styled.div`
+  position: absolute;
+  top: -10px;
+  right: 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: red;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+`
 
 const PageContainer = styled.section`
   height: 100vh;
@@ -191,7 +281,7 @@ const ParcelHeader = styled.section`
   padding-right: 32px;
 
   & > :first-child {
-    margin-right: 465px;
+    margin-right: 275px;
     white-space: nowrap;
   }
 `;
@@ -204,7 +294,7 @@ const ParcelSubHeader = styled.div`
   border: 1px solid grey;
 
   & > :first-child {
-    margin-right: 220px;
+    margin-right: 270px;
   }
   
   & > :nth-child(2) {
@@ -212,6 +302,6 @@ const ParcelSubHeader = styled.div`
   }
 
   & > :nth-child(3) {
-    margin-right: 125px;
+    margin-right: 200px;
   }
 `
