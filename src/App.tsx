@@ -3,6 +3,7 @@ import './App.css'
 import { MouseEvent } from 'react';
 import React from 'react';
 import { DetailedHTMLProps, TdHTMLAttributes } from 'react';
+import ModalData from './types/ModalData'
 
 declare global {
   namespace JSX {
@@ -31,6 +32,7 @@ function App() {
   const [parcels, setParcels] = useState<React.ReactNode[]>([])
   const [stage, setStage] = useState<string>('all')
   const [modal, setModal] = useState<boolean>(false)
+  const [modalData, setModalData] = useState<ModalData | null>(null)
 
   function handleStageClick(e: MouseEvent<HTMLDivElement>) {
     if (e.currentTarget.textContent != null) {
@@ -45,17 +47,10 @@ function App() {
     }
   }
 
-  function handleParcelClick() {
+  function handleParcelClick(data: ModalData) {
+    setModalData(data)
     setModal(true)
   }
-
-  function handleMouseEnter(e: MouseEvent<HTMLDivElement>) {
-    e.currentTarget.style.cursor = 'pointer';
-  };
-
-  function handleMouseLeave(e: MouseEvent<HTMLDivElement>) {
-    e.currentTarget.style.cursor = 'default';
-  };
 
   function closeModal() {
     setModal(false)
@@ -73,19 +68,18 @@ function App() {
   }
 
   function getClassName(currentStage: string) {
-    const defaultClassName = 'rounded-lg';
+    const defaultClassName = 'rounded-lg cursor-pointer';
     return currentStage === stage ? 'bg-neutral-300 ' + defaultClassName : defaultClassName;
   };
 
   function getStageHeaderText(currentStage: string){
-    console.log(currentStage)
     function getKeyByValue(currentStage: string) {
       for (const key in stageMap) {
         if (stageMap[key] === currentStage) {
           return key;
         }
       }
-    }    
+    }
     return `${getKeyByValue(currentStage)} (${stageCount(currentStage)})`;
   }
 
@@ -115,12 +109,12 @@ function App() {
       .then(data => {
         setParcels(parcels => [
           ...parcels, 
-          <tr id='parcel' onClick={handleParcelClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} key={Math.random()}>
-            <td className='border'>{data.data.trackings[0].tracker.trackingNumber}</td>
-            <td className='border'>{data.data.trackings[0].shipment.statusMilestone}</td>
-            <td className='border'>{data.data.trackings[0].shipment.originCountryCode}</td>
-            <td className='border'>{data.data.trackings[0].shipment.destinationCountryCode}</td>
-            <td className='border'>{data.data.trackings[0].recipient?.name ?? 'n/a'}</td>
+          <tr id='parcel' className='cursor-pointer' onClick={() => handleParcelClick(data)} key={Math.random()}>
+            <td id='tracking-number' className='border'>{data.data.trackings[0].tracker.trackingNumber}</td>
+            <td id='status-milestone' className='border'>{data.data.trackings[0].shipment.statusMilestone}</td>
+            <td id='origin-country' className='border'>{data.data.trackings[0].shipment.originCountryCode}</td>
+            <td id='destination-country' className='border'>{data.data.trackings[0].shipment.destinationCountryCode}</td>
+            <td id='courier' className='border'>{data.data.trackings[0].events.length > 0 ? data.data.trackings[0].events[0].courierCode : 'n/a'}</td>
           </tr>
         ])
       })
@@ -130,26 +124,48 @@ function App() {
 
   return (
     <div className="App">
-      <section id='page-container'>
+      <section id='coding-assignment'>
         { modal && 
           <div id='modal-section'>
             <div id='overlay' onClick={closeModal} className="fixed left-0 top-0 w-screen h-screen bg-black bg-opacity-60"/>
-            <div id='modal' className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 bg-white">
-              <div id='close-button' onClick={closeModal} className='absolute top-1 right-2 cursor-pointer'>
-                ❌
+            <div id='modal' className='fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 bg-white'>
+              <div id='updates' className="overflow-auto w-full h-full">
+                {modalData?.data?.trackings[0]?.events?.length! > 0 ? 
+                  <table>
+                    <thead>
+                      <tr className='text-black'>
+                        <th className='border border-black'>Date</th>
+                        <th className='border border-black'>Location</th>
+                        <th className='border border-black'>Status</th>
+                        <th className='border border-black'>Courier</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {modalData?.data?.trackings[0]?.events.map((update) => {
+                        return <tr className='text-black'>
+                          <td className='border border-black'>{update.datetime}</td>
+                          <td className='border border-black'>{update.location}</td>
+                          <td className='border border-black'>{update.status}</td>
+                          <td className='border border-black'>{update.courierCode}</td>
+                        </tr>
+                      })}
+                    </tbody>
+                  </table>
+                  : <div className='text-black'>No updates found</div>
+                }
+              </div>
+              <div className='bg-white h-7 relative border'>
+                <div id='close-btn' onClick={closeModal} className='absolute right-2 rounded-lg cursor-pointer bg-neutral-300 inline-block text-red-600'>❌ Close</div>
               </div>
             </div>
           </div>
         }
-        
         <section id='stage-nav-bar' className="bg-yellow-200 text-black flex justify-around p-15 font-medium">
           {stages.map((currentStage) => (
             <div
               id='stage-header'
               className={getClassName(currentStage)}
               onClick={handleStageClick}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
               key={currentStage}
             >
               {getStageHeaderText(currentStage)}
