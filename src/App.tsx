@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import styled from 'styled-components'
 import { MouseEvent } from 'react';
 import React from 'react';
 import { DetailedHTMLProps, TdHTMLAttributes } from 'react';
@@ -12,6 +11,8 @@ declare global {
     }
   }
 }
+
+const stages = ['all', 'pending', 'info_received', 'in_transit', 'out_for_delivery', 'failed_attempt', 'available_for_pickup', 'delivered', 'exception'];
 
 const stageMap: {[key: string]: string} = {
   'All': 'all',
@@ -61,13 +62,31 @@ function App() {
   }
 
   function stageCount(currStage: string) {
-    return parcels.filter((parcel) => {
+    return currStage === 'all' ? parcels.length :
+    parcels.filter((parcel) => {
       return (
         parcel != null &&
         React.isValidElement(parcel) &&
         parcel.props.children[1].props.children === currStage
       );
     }).length;
+  }
+
+  function getClassName(currentStage: string) {
+    const defaultClassName = 'rounded-lg';
+    return currentStage === stage ? 'bg-neutral-300 ' + defaultClassName : defaultClassName;
+  };
+
+  function getStageHeaderText(currentStage: string){
+    console.log(currentStage)
+    function getKeyByValue(currentStage: string) {
+      for (const key in stageMap) {
+        if (stageMap[key] === currentStage) {
+          return key;
+        }
+      }
+    }    
+    return `${getKeyByValue(currentStage)} (${stageCount(currentStage)})`;
   }
 
   // Fetching all trackers
@@ -122,23 +141,20 @@ function App() {
             </div>
           </div>
         }
+        
         <section id='stage-nav-bar' className="bg-yellow-200 text-black flex justify-around p-15 font-medium">
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'All'}>All {`(${parcels.length})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Pending'}>Pending {`(${stageCount('pending')})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Info. Received'}>Info. Received {`(${stageCount('info_received')})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'In Transit'}>In Transit {`(${stageCount('in_transit')})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Out for Delivery'}>Out for Delivery {`(${stageCount('out_for_delivery')})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Failed Attempt'}>Failed Attempt {`(${stageCount('failed_attempt')})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Available for Pickup'}>Available for Pickup {`(${stageCount('available_for_pickup')})`}</Stage>
-          {/* <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Delivered'}>Delivered {`(${stageCount('delivered')})`}</Stage> */}
-          { stage === 'delivered' ?
-            <div id='stage-header' className='bg-neutral-300 rounded-lg' onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Delivered {`(${stageCount('delivered')})`}</div>
-            : <div id='stage-header' className='rounded-lg' onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Delivered {`(${stageCount('delivered')})`}</div>
-          }
-          { stage === 'exception' ?
-            <div id='stage-header' className='bg-neutral-300 rounded-lg' onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Exception {`(${stageCount('exception')})`}</div>
-            : <div id='stage-header' className='rounded-lg' onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Exception {`(${stageCount('exception')})`}</div>
-          }
+          {stages.map((currentStage) => (
+            <div
+              id='stage-header'
+              className={getClassName(currentStage)}
+              onClick={handleStageClick}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              key={currentStage}
+            >
+              {getStageHeaderText(currentStage)}
+            </div>
+          ))}
         </section>
         <table id='parcel-stack' className='w-11/12 mx-auto mt-5'>
           <thead id='parcel-stack-header' className='text-red-500'>
@@ -166,89 +182,3 @@ function App() {
 }
 
 export default App
-
-interface StageProps {
-  text: string;
-  stage: string;
-}
-
-const Stage = styled.div<StageProps>`
-  margin: 0;
-  border-radius: 8px;
-  background-color: ${(props) => stageMap[props.text] === props.stage ? '#D3D3D3' : 'inherit'};
-`;
-
-const ParcelStack = styled.section`
-  margin: 2vw;
-`;
-
-const Parcel = styled.div`
-  display: flex;
-  justify-content: space-between;
-  height: 2em;
-  padding-left: 32px;
-  padding-right: 32px;
-  background-color: white;
-  color: black;
-  border: 1px solid grey;
-
-  &:first-child {
-    background-color: grey;
-  }
-`;
-
-const TrackerID = styled.div`
-  margin: 0;
-`;
-
-const StatusMilestone = styled.div`
-  margin: 0;
-`;
-
-const OriginCountryCode = styled.div`
-  margin: 0;
-`;
-
-const DestinationCountryCode = styled.div`
-  margin: 0;
-`;
-
-const RecipientName = styled.div`
-  margin: 0;
-`;
-
-const ParcelHeader = styled.section`
-  margin: 0;
-  display: flex;
-  height: 2em;
-  background-color: grey;
-  color: black;
-  border: 1px solid grey;
-  padding-left: 32px;
-  padding-right: 32px;
-
-  & > :first-child {
-    margin-right: 275px;
-    white-space: nowrap;
-  }
-`;
-
-const ParcelSubHeader = styled.div`
-  display: flex;
-  height: 2em;
-  background-color: grey;
-  color: black;
-  border: 1px solid grey;
-
-  & > :first-child {
-    margin-right: 270px;
-  }
-  
-  & > :nth-child(2) {
-    margin-right: 200px;
-  }
-
-  & > :nth-child(3) {
-    margin-right: 200px;
-  }
-`
