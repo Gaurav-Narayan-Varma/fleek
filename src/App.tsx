@@ -60,6 +60,16 @@ function App() {
     setModal(false)
   }
 
+  function stageCount(currStage: string) {
+    return parcels.filter((parcel) => {
+      return (
+        parcel != null &&
+        React.isValidElement(parcel) &&
+        parcel.props.children[1].props.children === currStage
+      );
+    }).length;
+  }
+
   // Fetching all trackers
   useEffect(() => {
     fetch('https://api.ship24.com/public/v1/trackers', {
@@ -84,13 +94,16 @@ function App() {
       })
       .then(response => response.json())
       .then(data => {
-        setParcels(parcels => [...parcels, <Parcel onClick={handleParcelClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} key={Math.random()}>
-          <TrackerID>{data.data.trackings[0].tracker.trackingNumber}</TrackerID>
-          <StatusMilestone>{data.data.trackings[0].shipment.statusMilestone}</StatusMilestone>
-          <OriginCountryCode>{data.data.trackings[0].shipment.originCountryCode}</OriginCountryCode>
-          <DestinationCountryCode>{data.data.trackings[0].shipment.destinationCountryCode}</DestinationCountryCode>
-          <RecipientName>{data.data.trackings[0].recipient?.name ?? 'n/a'}</RecipientName>
-        </Parcel>])
+        setParcels(parcels => [
+          ...parcels, 
+          <tr id='parcel' onClick={handleParcelClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} key={Math.random()}>
+            <td className='border'>{data.data.trackings[0].tracker.trackingNumber}</td>
+            <td className='border'>{data.data.trackings[0].shipment.statusMilestone}</td>
+            <td className='border'>{data.data.trackings[0].shipment.originCountryCode}</td>
+            <td className='border'>{data.data.trackings[0].shipment.destinationCountryCode}</td>
+            <td className='border'>{data.data.trackings[0].recipient?.name ?? 'n/a'}</td>
+          </tr>
+        ])
       })
       .catch(error => console.error(error))
     })
@@ -98,71 +111,53 @@ function App() {
 
   return (
     <div className="App">
-      <section>
+      <section id='page-container'>
         { modal && 
-          <Modal>
-            <Overlay onClick={closeModal}/>
-            <ModalContent>
-              <CloseButton onClick={closeModal}>
-                X
-              </CloseButton>
-            </ModalContent>
-          </Modal>
+          <div id='modal-section'>
+            <div id='overlay' onClick={closeModal} className="fixed left-0 top-0 w-screen h-screen bg-black bg-opacity-60"/>
+            <div id='modal' className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 bg-white">
+              <div id='close-button' onClick={closeModal} className='absolute top-1 right-2 cursor-pointer'>
+                ❌
+              </div>
+            </div>
+          </div>
         }
-        <section className="bg-yellow-200 text-black flex justify-around p-15 font-medium">
+        <section id='stage-nav-bar' className="bg-yellow-200 text-black flex justify-around p-15 font-medium">
           <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'All'}>All {`(${parcels.length})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Pending'}>Pending {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'pending'}}}).length})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Info. Received'}>Info. Received {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'info_received'}}}).length})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'In Transit'}>In Transit {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'in_transit'}}}).length})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Out for Delivery'}>Out for Delivery {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'out_for_delivery'}}}).length})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Failed Attempt'}>Failed Attempt {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'failed_attempt'}}}).length})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Available for Pickup'}>Available for Pickup {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'available_for_pickup'}}}).length})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Delivered'}>Delivered {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'delivered'}}}).length})`}</Stage>
-          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Exception'}>Exception {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'exception'}}}).length})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Pending'}>Pending {`(${stageCount('pending')})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Info. Received'}>Info. Received {`(${stageCount('info_received')})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'In Transit'}>In Transit {`(${stageCount('in_transit')})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Out for Delivery'}>Out for Delivery {`(${stageCount('out_for_delivery')})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Failed Attempt'}>Failed Attempt {`(${stageCount('failed_attempt')})`}</Stage>
+          <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Available for Pickup'}>Available for Pickup {`(${stageCount('available_for_pickup')})`}</Stage>
+          {/* <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Delivered'}>Delivered {`(${stageCount('delivered')})`}</Stage> */}
+          { stage === 'delivered' ?
+            <div id='stage-header' className='bg-neutral-300 rounded-lg' onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Delivered {`(${stageCount('delivered')})`}</div>
+            : <div id='stage-header' className='rounded-lg' onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Delivered {`(${stageCount('delivered')})`}</div>
+          }
+          { stage === 'exception' ?
+            <div id='stage-header' className='bg-neutral-300 rounded-lg' onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Exception {`(${stageCount('exception')})`}</div>
+            : <div id='stage-header' className='rounded-lg' onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Exception {`(${stageCount('exception')})`}</div>
+          }
         </section>
-        <ParcelStack>
-          <ParcelHeader>
-            <TrackerID>Tracking Number</TrackerID>
-            <ParcelSubHeader>
-              <StatusMilestone>Status</StatusMilestone>
-              <OriginCountryCode>Origin</OriginCountryCode>
-              <DestinationCountryCode>Destination</DestinationCountryCode>
-              <RecipientName>Customer</RecipientName>
-            </ParcelSubHeader>
-          </ParcelHeader>
-          {stage === 'all' ? parcels : parcels.filter((parcel) => {
-            if (parcel != null) {
-              if (React.isValidElement(parcel)) {
-                return parcel.props.children[1].props.children === stage
-              }
-            }
-          })}
-        </ParcelStack>
-
-        <table className='w-full'>
-          <thead className='text-red-500'>
-            <tr className=''>
-              <th className='border'>Name</th>
-              <th className='border'>Age</th>
-              <th className='border'>Gender</th>
+        <table id='parcel-stack' className='w-11/12 mx-auto mt-5'>
+          <thead id='parcel-stack-header' className='text-red-500'>
+            <tr>
+              <th className='border'>Tracking Number</th>
+              <th className='border'>Status</th>
+              <th className='border'>Origin</th>
+              <th className='border'>Destination</th>
+              <th className='border'>Courier</th>
             </tr>
           </thead>
           <tbody>
-            <tr className='border'>
-              <td>Anom</td>
-              <td>19</td>
-              <td>Male</td>
-            </tr>
-            <tr className='border'>
-              <td>Megha</td>
-              <td>19</td>
-              <td>Female</td>
-            </tr>
-            <tr className='border'>
-              <td>Subham</td>
-              <td>25</td>
-              <td>Male</td>
-            </tr>
+            {stage === 'all' ? parcels : parcels.filter((parcel) => {
+              if (parcel != null) {
+                if (React.isValidElement(parcel)) {
+                  return parcel.props.children[1].props.children === stage
+                }
+              }
+            })}
           </tbody>
         </table>
       </section>
@@ -171,39 +166,6 @@ function App() {
 }
 
 export default App
-
-const Modal = styled.div`
-`;
-
-const Overlay = styled.div`
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.7);
-`
-
-const ModalContent = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  height: 50%;
-  width: 50%;
-  background-color: white;
-`
-const CloseButton = styled.div`
-  position: absolute;
-  top: -10px;
-  right: 0;
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: red;
-  border: none;
-  padding: 0.5rem;
-  cursor: pointer;
-`
 
 interface StageProps {
   text: string;
