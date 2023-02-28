@@ -98,7 +98,7 @@ function App() {
 
   return (
     <div className="App">
-      <PageContainer>
+      <section>
         { modal && 
           <Modal>
             <Overlay onClick={closeModal}/>
@@ -109,7 +109,7 @@ function App() {
             </ModalContent>
           </Modal>
         }
-        <TrackingBar>
+        <section className="bg-yellow-200 text-black flex justify-around p-15 font-medium">
           <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'All'}>All {`(${parcels.length})`}</Stage>
           <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Pending'}>Pending {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'pending'}}}).length})`}</Stage>
           <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Info. Received'}>Info. Received {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'info_received'}}}).length})`}</Stage>
@@ -119,7 +119,7 @@ function App() {
           <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Available for Pickup'}>Available for Pickup {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'available_for_pickup'}}}).length})`}</Stage>
           <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Delivered'}>Delivered {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'delivered'}}}).length})`}</Stage>
           <Stage onClick={handleStageClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} stage={stage} text={'Exception'}>Exception {`(${parcels.filter((parcel) => {if (parcel != null) {if (React.isValidElement(parcel)) {return parcel.props.children[1].props.children === 'exception'}}}).length})`}</Stage>
-        </TrackingBar>
+        </section>
         <ParcelStack>
           <ParcelHeader>
             <TrackerID>Tracking Number</TrackerID>
@@ -139,33 +139,33 @@ function App() {
           })}
         </ParcelStack>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Age</th>
-              <th>Gender</th>
+        <table className='w-full'>
+          <thead className='text-red-500'>
+            <tr className=''>
+              <th className='border'>Name</th>
+              <th className='border'>Age</th>
+              <th className='border'>Gender</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr className='border'>
               <td>Anom</td>
               <td>19</td>
               <td>Male</td>
             </tr>
-            <tr>
+            <tr className='border'>
               <td>Megha</td>
               <td>19</td>
               <td>Female</td>
             </tr>
-            <tr>
+            <tr className='border'>
               <td>Subham</td>
               <td>25</td>
               <td>Male</td>
             </tr>
           </tbody>
         </table>
-      </PageContainer>
+      </section>
     </div>
   )
 }
@@ -204,21 +204,6 @@ const CloseButton = styled.div`
   padding: 0.5rem;
   cursor: pointer;
 `
-
-const PageContainer = styled.section`
-  height: 100vh;
-  width: 100vw;
-`;
-
-const TrackingBar = styled.section`
-  background-color: yellow;
-  color: black;
-  display: flex;
-  justify-content: space-around;
-  margin: 0;
-  padding: 15px;
-  font-weight: 450;
-`;
 
 interface StageProps {
   text: string;
