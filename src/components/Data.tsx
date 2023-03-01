@@ -1,95 +1,118 @@
-import { Link } from 'react-router-dom'
-import React, { PureComponent } from 'react';
-import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React from 'react';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import { Link } from 'react-router-dom'; 
+import TatData from '../data/tat.json'
 
-const data = [
-  {
-    name: 'Page A',
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: 'Page B',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: 'Page C',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: 'Page D',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: 'Page E',
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: 'Page F',
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: 'Page G',
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-class Data extends PureComponent {
-    static demoUrl = 'https://codesandbox.io/s/stacked-bar-chart-s47i2';
+const options = {
+  plugins: {
+    title: {
+      display: true,
+      text: 'Chart.js Bar Chart - Stacked',
+    },
+  },
+  responsive: true,
+  scales: {
+    x: {
+      stacked: true,
+    },
+    y: {
+      stacked: true,
+    },
+  },
+};
 
-    render() {
-        return (
-            <section id='page-container' className='flex'>
-                <section id='nav-bar' className='px-5 w-48 shrink-0 h-screen bg-white text-black font-sans'>
-                    <ul className='mt-6'>
-                        <li className='mb-4'>
-                            <Link to='/'>🔨 Coding Task</Link>
-                        </li>
-                        <li className="font-bold">
-                            <a>📈 Data Task</a>
-                        </li>
-                    </ul>
-                </section>
-                <section id='data-assignment'>
-                    <ResponsiveContainer width="100%" height="100%">
-                        <BarChart
-                            width={500}
-                            height={300}
-                            data={data}
-                            margin={{
-                                top: 20,
-                                right: 30,
-                                left: 20,
-                                bottom: 5,
-                            }}
-                            >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="pv" stackId="a" fill="#8884d8" />
-                            <Bar dataKey="uv" stackId="a" fill="#82ca9d" />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </section>
+const labels = ['09-2022', '10-2022', '11-2022', '12-2022', '01-2023', '02-2023'];
+
+const data = {
+  labels,
+  datasets: [
+    {
+      label: 'Customs',
+      data: Object.values(TatData.customs),
+      backgroundColor: 'rgb(255, 99, 132)',
+    },
+    {
+      label: 'CX confirmation',
+      data: Object.values(TatData.cx_confirmation),
+      backgroundColor: 'rgb(75, 192, 192)',
+    },
+    {
+      label: 'Interal ops',
+      data: Object.values(TatData['internal_/_ops']),
+      backgroundColor: 'rgb(53, 162, 235)',
+    },
+    {
+      label: 'Items unavailable',
+      data: Object.values(TatData.items_unavailable),
+      backgroundColor: 'rgb(53, 162, 235)',
+    },
+    {
+      label: 'Other',
+      data: Object.values(TatData.other),
+      backgroundColor: 'rgb(53, 162, 235)',
+    },
+    {
+      label: 'Product not as described',
+      data: Object.values(TatData.product_not_as_described),
+      backgroundColor: 'rgb(53, 162, 235)',
+    },
+    {
+      label: 'Product quality',
+      data: Object.values(TatData.product_quality),
+      backgroundColor: 'rgb(53, 162, 235)',
+    },
+    {
+      label: 'Test duplicate',
+      data: Object.values(TatData['test_/_duplicate']),
+      backgroundColor: 'rgb(53, 162, 235)',
+    },
+    {
+      label: 'Vendor related',
+      data: Object.values(TatData.vendor_related),
+      backgroundColor: 'rgb(53, 162, 235)',
+    },
+  ],
+};
+// faker.datatype.number({ min: -1000, max: 1000 })
+function Data() {
+    return (
+        <section id='page-container' className='flex'>
+            <section id='nav-bar' className='px-5 w-48 shrink-0 h-screen bg-white text-black font-sans'>
+                <ul className='mt-6'>
+                    <li className='mb-4'>
+                        <Link to='/'>🔨 Coding Task</Link>
+                    </li>
+                    <li className="font-bold">
+                        <a>📈 Data Task</a>
+                    </li>
+                </ul>
             </section>
-        )
-    }
-
+            <section id='data-assignment' className='w-full h-full'>
+              <section className='m'>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur ducimus placeat libero optio dolore, dignissimos quisquam obcaecati tenetur reprehenderit consequatur. Laboriosam et fugiat quo velit ut illum, veniam reiciendis eum?
+              </section>
+              <Bar options={options} data={data} />
+            </section>
+        </section>
+    )
 }
 
 export default Data
