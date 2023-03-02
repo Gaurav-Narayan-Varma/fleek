@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 import { MouseEvent } from 'react';
 import { DetailedHTMLProps, TdHTMLAttributes } from 'react';
 import ModalData from '../types/ModalData'
-import { Link } from 'react-router-dom'
 
 declare global {
     namespace JSX {
@@ -68,7 +67,7 @@ function Coding() {
     }
   
     function getClassName(currentStage: string) {
-      const defaultClassName = 'rounded-lg cursor-pointer';
+      const defaultClassName = 'rounded-lg cursor-pointer px-1';
       return currentStage === stage ? 'bg-neutral-300 ' + defaultClassName : defaultClassName;
     };
   
@@ -123,54 +122,44 @@ function Coding() {
     }, [trackers])
 
     return(
-        <section id='page-container' className='flex'>
-            <section id='nav-bar' className='px-5 w-48 shrink-0 h-screen bg-white text-black font-sans'>
-                <ul className='mt-6'>
-                    <li className='mb-4 font-bold'>
-                    <a>🔨 Coding Task</a>
-                    </li>
-                    <li>
-                    <Link to='/data'>📈 Data Task</Link>
-                    </li>
-                </ul>
-            </section>
-            <section id='coding-assignment' className='w-full'>
-            { modal && 
-            <div id='modal-section'>
-                <div id='overlay' onClick={closeModal} className="fixed left-0 top-0 w-screen h-screen bg-black bg-opacity-60"/>
-                <div id='modal' className='fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 bg-white'>
-                <div id='updates' className="overflow-auto w-full h-full">
-                    {modalData?.data?.trackings[0]?.events?.length! > 0 ? 
-                    <table>
-                        <thead>
-                        <tr className='text-black'>
-                            <th className='border border-black'>Date</th>
-                            <th className='border border-black'>Location</th>
-                            <th className='border border-black'>Status</th>
-                            <th className='border border-black'>Courier</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {modalData?.data?.trackings[0]?.events.map((update) => {
-                            return <tr className='text-black'>
-                            <td className='border border-black'>{update.datetime}</td>
-                            <td className='border border-black'>{update.location}</td>
-                            <td className='border border-black'>{update.status}</td>
-                            <td className='border border-black'>{update.courierCode}</td>
-                            </tr>
-                        })}
-                        </tbody>
-                    </table>
-                    : <div className='text-black'>No updates found</div>
-                    }
-                </div>
-                <div className='bg-white h-7 relative border'>
-                    <div id='close-btn' onClick={closeModal} className='absolute right-2 rounded-lg cursor-pointer bg-neutral-300 inline-block text-red-600'>❌ Close</div>
-                </div>
-                </div>
-            </div>
-            }
-            <section id='stage-nav-bar' className="bg-yellow-200 text-black flex justify-around p-15 font-medium">
+        <section id='page-container' className='flex w-screen'>
+          <section id='parcel-dashboard' className='w-full h-screen bg-gray-50'>
+          { modal && 
+          <div id='modal-section'>
+              <div id='overlay' onClick={closeModal} className="fixed left-0 top-0 w-screen h-screen bg-black bg-opacity-60"/>
+              <div id='modal' className='fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 bg-white'>
+              <div id='updates' className="overflow-auto w-full h-full">
+                  {modalData?.data?.trackings[0]?.events?.length! > 0 ? 
+                  <table>
+                      <thead>
+                      <tr className='text-black'>
+                          <th className='border border-black'>Date</th>
+                          <th className='border border-black'>Location</th>
+                          <th className='border border-black'>Status</th>
+                          <th className='border border-black'>Courier</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {modalData?.data?.trackings[0]?.events.map((update) => {
+                          return <tr className='text-black'>
+                          <td className='border border-black'>{update.datetime}</td>
+                          <td className='border border-black'>{update.location}</td>
+                          <td className='border border-black'>{update.status}</td>
+                          <td className='border border-black'>{update.courierCode}</td>
+                          </tr>
+                      })}
+                      </tbody>
+                  </table>
+                  : <div className='text-black'>No updates found</div>
+                  }
+              </div>
+              <div className='bg-white h-7 relative border'>
+                  <div id='close-btn' onClick={closeModal} className='absolute right-2 rounded-lg cursor-pointer bg-neutral-300 inline-block text-red-600'>❌ Close</div>
+              </div>
+              </div>
+          </div>
+          }
+          <section id='stage-nav-bar' className="bg-yellow-200 text-black flex justify-around p-15 font-medium h-8 items-center rounded-lg mt-2 mx-2 bg-gradient-to-r from-cyan-500 to-blue-500">
             {stages.map((currentStage) => (
                 <div
                 id='stage-header'
@@ -181,28 +170,28 @@ function Coding() {
                 {getStageHeaderText(currentStage)}
                 </div>
             ))}
-            </section>
+          </section>
             <table id='parcel-stack' className='w-11/12 mx-auto mt-5'>
-            <thead id='parcel-stack-header' className='text-red-500'>
-                <tr>
-                <th className='border'>Tracking Number</th>
-                <th className='border'>Status</th>
-                <th className='border'>Origin</th>
-                <th className='border'>Destination</th>
-                <th className='border'>Courier</th>
-                </tr>
-            </thead>
-            <tbody>
-                {stage === 'all' ? parcels : parcels.filter((parcel) => {
-                if (parcel != null) {
-                    if (React.isValidElement(parcel)) {
-                    return parcel.props.children[1].props.children === stage
-                    }
-                }
-                })}
-            </tbody>
+              <thead id='parcel-stack-header' className='text-black'>
+                  <tr>
+                  <th className='border'>Tracking Number</th>
+                  <th className='border'>Status</th>
+                  <th className='border'>Origin</th>
+                  <th className='border'>Destination</th>
+                  <th className='border'>Courier</th>
+                  </tr>
+              </thead>
+              <tbody className="text-black">
+                  {stage === 'all' ? parcels : parcels.filter((parcel) => {
+                  if (parcel != null) {
+                      if (React.isValidElement(parcel)) {
+                      return parcel.props.children[1].props.children === stage
+                      }
+                  }
+                  })}
+              </tbody>
             </table>
-            </section>
+          </section>
       </section>
     )
 
