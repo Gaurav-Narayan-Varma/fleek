@@ -1,0 +1,58 @@
+{
+  "attempted_delivery": {
+    "France": 15.2,
+    "Germany": 20.4285714286,
+    "United Kingdom": 20.0,
+    "United States": 10.4594594595,
+    "ROW": 21.2571428571
+  },
+  "confirmed": {
+    "France": 154.3235294118,
+    "Germany": 102.7727272727,
+    "United Kingdom": 37.0,
+    "United States": 69.7220902613,
+    "ROW": 96.737206519
+  },
+  "delivered": {
+    "France": 4.2777777778,
+    "Germany": 2.8979591837,
+    "United Kingdom": 1.1904761905,
+    "United States": 2.291954023,
+    "ROW": 0.3708560617
+  },
+  "failure": {
+    "France": 3.0,
+    "Germany": null,
+    "United Kingdom": 15.3333333333,
+    "United States": null,
+    "ROW": 14.0
+  },
+  "in_transit": {
+    "France": 87.231884058,
+    "Germany": 137.1320754717,
+    "United Kingdom": 121.6607142857,
+    "United States": 81.6030828516,
+    "ROW": 140.9738916814
+  },
+  "label_printed": {
+    "France": null,
+    "Germany": null,
+    "United Kingdom": null,
+    "United States": 10.0,
+    "ROW": 5.0
+  },
+  "label_purchased": {
+    "France": 67.75,
+    "Germany": 5.25,
+    "United Kingdom": 3.1132075472,
+    "United States": 27.6951219512,
+    "ROW": 53.1506410256
+  },
+  "out_for_delivery": {
+    "France": 5.7551020408,
+    "Germany": 5.725,
+    "United Kingdom": 7.6944444444,
+    "United States": 6.766743649,
+    "ROW": 9.278448726
+  }
+}
