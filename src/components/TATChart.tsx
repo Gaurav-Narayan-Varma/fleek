@@ -100,9 +100,9 @@ import TatData from '../data/tat.json'
   
   export default function TATChart() {
     return (
-        <>
-            <div className='text-black text-center mb-10'>Turn around Time</div>
+        <div id='a2q2'>
+            <div className='text-black text-center'>Turn around Time</div>
             <Bar options={options} data={data} />
-        </>
+        </div>
     )
 }

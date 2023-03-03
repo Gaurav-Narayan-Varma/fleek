@@ -136,7 +136,7 @@ export default function TTFChart() {
     };
 
     return (
-        <div className='mb-36'>
+        <div id='a1q1' className='mb-36'>
             <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white'>
                 <option value='buyer'>Time to Fulfill by Buyer Country</option>
                 <option value='vendor'>Time to Fulfill by Vendor Country</option>

@@ -10,10 +10,8 @@ import {
 import { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import ftdVendorData from '../data/ftd_vendor.json'
-import ftdBuyerData from '../data/ftd_buyer.json'
+import stageBuyerDataTable from '../data/stage_buyer_table.json'
 import stageBuyerData from '../data/stage_buyer.json'
-
-console.log(Object.keys(stageBuyerData))
 
 ChartJS.register(
     CategoryScale,
@@ -33,21 +31,6 @@ function getRandomColor() {
     return `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
 }
 
-// Vendor data
-// Clean data: tranform into bucket list
-for (let key in ftdVendorData) {
-
-    // Bucket the data by 1 hour increments
-    const max_value = Math.max(...ftdVendorData[key as keyof typeof ftdVendorData].time_to_deliver_list[0]);
-    const bucket = Array(max_value + 1).fill(0);
-
-    for (let i = 0; i < ftdVendorData[key as keyof typeof ftdVendorData].time_to_deliver_list[0].length; i++) {
-        const index = ftdVendorData[key as keyof typeof ftdVendorData].time_to_deliver_list[0][i];
-        bucket[index]++;
-    }
-    ftdVendorData[key as keyof typeof ftdVendorData].time_to_deliver_list[0] = bucket
-}
-
 // Build vendor datasets
 const ftdVendorSets = Object.values(ftdVendorData).map((country) => {
     return {
@@ -59,33 +42,14 @@ const ftdVendorSets = Object.values(ftdVendorData).map((country) => {
     }
 })
 
-
-// Vendor data
-// Clean data: tranform into bucket list
-for (let key in ftdBuyerData) {
-
-    // Bucket the data by 1 hour increments
-    const max_value = Math.max(...ftdBuyerData[key as keyof typeof ftdBuyerData].time_to_deliver_list);
-    const bucket = Array(max_value + 1).fill(0);
-
-    for (let i = 0; i < ftdBuyerData[key as keyof typeof ftdBuyerData].time_to_deliver_list.length; i++) {
-        const index = ftdBuyerData[key as keyof typeof ftdBuyerData].time_to_deliver_list[i];
-        bucket[index]++;
-    }
-    ftdBuyerData[key as keyof typeof ftdBuyerData].time_to_deliver_list = bucket
-}
-
 // Build buyer datasets
 const stageBuyerSets = Object.values(stageBuyerData).map((stage) => {
     let nameStage
-
     for (let key in stageBuyerData) {
         if (stageBuyerData[key as keyof typeof stageBuyerData] === stage) {
             nameStage = key
         }
     }
-
-    // console.log(stageBuyerData[nameStage as keyof typeof stageBuyerData])
     return {
         label: nameStage,
         data: Object.values(stage),
@@ -95,8 +59,6 @@ const stageBuyerSets = Object.values(stageBuyerData).map((stage) => {
 
 export default function StageStackChart() {
     const [option, setOption] = useState<string>('buyer')
-
-    console.log(stageBuyerSets)
 
     const data = {
         labels,
@@ -139,13 +101,46 @@ export default function StageStackChart() {
         },
     };
 
+    console.log(Object.values(stageBuyerDataTable))
     return (
-        <div className='mb-36'>
+        <div id='a1q2' className='mb-36 flex flex-col justify-center'>
             <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white'>
                 <option value='buyer'>Time to Fulfill by Buyer Country</option>
                 <option value='vendor'>Time to Fulfill by Vendor Country</option>
             </select>
             <Bar options={options} data={data} />
+            <table className='text-black border border-black self-center mt-9'>
+                <thead>
+                    <tr>
+                        <th className='border border-black'>Country</th>
+                        <th className='border border-black'>Label purchased</th>
+                        <th className='border border-black'>Label printed</th>
+                        <th className='border border-black'>Confirmed</th>
+                        <th className='border border-black'>In transit</th>
+                        <th className='border border-black'>Out for delivery</th>
+                        <th className='border border-black'>Attempted delivery</th>
+                        <th className='border border-black'>Delivered</th>
+                        <th className='border border-black'>Failure</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {Object.values(stageBuyerDataTable).map((country) => {
+                        return (
+                            <tr>
+                                <td className='border border-black'>{country.cc}</td>
+                                <td className='border border-black'>{country.label_purchased} hours</td>
+                                <td className='border border-black'>{country.label_printed} hours</td>
+                                <td className='border border-black'>{country.confirmed} hours</td>
+                                <td className='border border-black'>{country.in_transit} hours</td>
+                                <td className='border border-black'>{country.out_for_delivery} hours</td>
+                                <td className='border border-black'>{country.attempted_delivery} hours</td>
+                                <td className='border border-black'>{country.delivered} hours</td>
+                                <td className='border border-black'>{country.failure} hours</td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            </table>
         </div>
     )
 }
