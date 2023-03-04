@@ -1,7 +1,8 @@
 import TATChart from './TATChart'
-import TTFChart from './TTFChart'
+import TTFByHourChart from './TTFByHourChart'
 import FTDChart from './FTDChart'
 import StageStackChart from './StageStackChart'
+import TTFByCountryChart from './TTFByCountryChart'
 
 function Data() {
     return (
@@ -18,12 +19,17 @@ function Data() {
             <li className='mb-2 inline-block transition ease-in-out delay-50'>
               <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#a2q2'>Understanding turn around times - Area 2: Question 2</a>
             </li>
+            <br></br>
+            <li className='mb-2 inline-block transition ease-in-out delay-50'>
+              <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#a1q1a'>Appendix</a>
+            </li>
           </ul>
         </div>
-        <TTFChart />
+        <TTFByCountryChart />
         <FTDChart />
         <StageStackChart />
         <TATChart />
+        <TTFByHourChart />
       </section>
     )
 }
