@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import {
   Chart as ChartJS,
   LinearScale,
@@ -15,6 +15,9 @@ import { Chart } from 'react-chartjs-2';
 import OrderCount from '../data/order_count.json'
 import TTFBuyer from '../data/ttf_row_buyer.json'
 import TTFBuyerMedian from '../data/ttf_row_buyer_median.json'
+import OrderCountVendor from '../data/order_count_vendor.json'
+import TTFVendor from '../data/ttf_row_vendor.json'
+import TTFVendorMedian from '../data/ttf_row_vendor_median.json'
 
 ChartJS.register(
   LinearScale,
@@ -28,15 +31,10 @@ ChartJS.register(
   BarController
 );
 
-const labels = ['United Kingdom', 'United States', 'France', 'Germany', 'ROW'];
+const buyerLabels = ['United Kingdom', 'United States', 'France', 'Germany', 'ROW'];
+const vendorLabels = ['Pakistan', 'United Kingdom', 'United States', 'India', 'ROW'];
 
 const options = {
-    plugins: {
-      title: {
-        display: true,
-        text: 'Understanding Time to Fulfill',
-      },
-    },
     scales: {
       y: {
         type: 'linear' as const,
@@ -54,37 +52,49 @@ const options = {
     },
   };
 
-const data = {
-  labels,
-  datasets: [
-    {
-        type: 'line' as const,
-        label: 'Total Orders',
-        borderColor: 'rgb(255, 99, 132)',
-        borderWidth: 2,
-        fill: false,
-        data: Object.values(OrderCount[1]),
-        yAxisID: 'y',
-    },
-    {
-        type: 'bar' as const,
-        label: 'Average Time to Fulfill (Hours)',
-        backgroundColor: 'rgb(75, 192, 192)',
-        data: Object.values(TTFBuyer[1]),
-        borderColor: 'white',
-        borderWidth: 2,
-        yAxisID: 'y1',
-    },
-    {
-        type: 'bar' as const,
-        label: 'Median Time to Fulfill (Hours)',
-        backgroundColor: 'rgb(53, 162, 235)',
-        data: Object.values(TTFBuyerMedian[1]),
-        yAxisID: 'y1',
-    },
-  ],
-};
+  export default function TTFByCountryChart() {
+      const [option, setOption] = useState<string>('buyer')
+      
+      const data = {
+        labels: option==='buyer' ? buyerLabels : vendorLabels,
+        datasets: [
+          {
+              type: 'line' as const,
+              label: 'Total Orders',
+              borderColor: 'rgb(255, 99, 132)',
+              borderWidth: 2,
+              fill: false,
+              data: option==='buyer' ? Object.values(OrderCount[1]) : Object.values(OrderCountVendor[1]),
+              yAxisID: 'y1',
+          },
+          {
+              type: 'bar' as const,
+              label: 'Average Time to Fulfill (Hours)',
+              backgroundColor: 'rgb(75, 192, 192)',
+              data: option==='buyer' ? Object.values(TTFBuyer[1]) : Object.values(TTFVendor[1]),
+              borderColor: 'white',
+              borderWidth: 2,
+              yAxisID: 'y',
+          },
+          {
+              type: 'bar' as const,
+              label: 'Median Time to Fulfill (Hours)',
+              backgroundColor: 'rgb(53, 162, 235)',
+              data: option==='buyer' ? Object.values(TTFBuyerMedian[1]) : Object.values(TTFVendorMedian[1]),
+              yAxisID: 'y',
+          },
+        ],
+      };
 
-export default function TTFByCountryChart() {
-  return <Chart options={options} type='bar' data={data} />;
+  return (
+    <div id='a1q1'>
+        <div className='text-black text-center mb-2'>
+            Time to Fulfill by <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white rounded-md border border-stone-200'>
+                <option value='buyer'>Buyer Country</option>
+                <option value='vendor'>Vendor Country</option>
+            </select>
+        </div>
+        <Chart options={options} type='bar' data={data} />
+    </div>
+  )
 }

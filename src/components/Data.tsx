@@ -3,6 +3,7 @@ import TTFByHourChart from './TTFByHourChart'
 import FTDChart from './FTDChart'
 import StageStackChart from './StageStackChart'
 import TTFByCountryChart from './TTFByCountryChart'
+import OrdersTimeChart from './OrdersTimeChart'
 
 function Data() {
     return (
@@ -28,6 +29,7 @@ function Data() {
         <TTFByCountryChart />
         <FTDChart />
         <StageStackChart />
+        <OrdersTimeChart />
         <TATChart />
         <TTFByHourChart />
       </section>
