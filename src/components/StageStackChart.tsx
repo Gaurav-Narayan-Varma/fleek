@@ -101,7 +101,6 @@ export default function StageStackChart() {
         },
     };
 
-    console.log(Object.values(stageBuyerDataTable))
     return (
         <div id='a1q2' className='mb-36 flex flex-col justify-center'>
             <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white'>

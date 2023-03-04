@@ -10,7 +10,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import OrdersTimeGroupedData from '../data/orders_time_grouped.json'
+import OrdersTimeData from '../data/orders_time.json'
 
 interface CountryData {
     [country: string]: {
@@ -18,7 +18,7 @@ interface CountryData {
     }
   }
 
-const myOrdersTimeGroupedData = OrdersTimeGroupedData as CountryData
+const myOrdersTimeData = OrdersTimeData as CountryData
 
 ChartJS.register(
   CategoryScale,
@@ -30,43 +30,46 @@ ChartJS.register(
   Legend
 );
 
-const options = {
+export const options = {
   responsive: true,
   plugins: {
     legend: {
-      display: true,
+      display: false,
     },
     title: {
       display: true,
-      text: 'Orders Over Time',
+      text: 'Orders Over Time Granular View',
     },
   },
 };
 
-const colors = ['#37a2eb', '#ff6384', '#4cc0c0', '#ff9e40', '#9a66ff']
+function getRandomColor() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
+}
 
 const labels = ['2021-11', '"2021-12', '2022-01', '2022-02', '2022-03', 
                 '2202-04', '2022-05', '2022-06', '2022-07', '2022-08',
                 '2022-09', '2022-10', '2022-11', '2022-12', '2023-01',
                 '2023-02'];
 
-const sets = Object.keys(myOrdersTimeGroupedData).map((key) => {
-    const lineColor = colors.pop()
+const sets = Object.keys(myOrdersTimeData).map((key) => {
+    const lineColor = getRandomColor()
     return ({
         label: key,
-        data: Object.values(myOrdersTimeGroupedData[key]),
+        data: Object.values(myOrdersTimeData[key]),
         borderColor: `${lineColor}`,
         backgroundColor: `${lineColor}`,
     })
 });
-
-console.log(sets)
 
 const data = {
   labels,
   datasets: sets,
 };
 
-export default function OrdersTimeChart() {
+export default function OrdersTimeChartGranular() {
   return <Line options={options} data={data} />;
 }

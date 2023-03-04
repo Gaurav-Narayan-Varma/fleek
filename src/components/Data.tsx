@@ -4,6 +4,8 @@ import FTDChart from './FTDChart'
 import StageStackChart from './StageStackChart'
 import TTFByCountryChart from './TTFByCountryChart'
 import OrdersTimeChart from './OrdersTimeChart'
+import OrdersTimeChartGranular from './OrdersTimeChartGranular'
+import FTDByCountryChart from './FTDByCountryChart'
 
 function Data() {
     return (
@@ -26,12 +28,20 @@ function Data() {
             </li>
           </ul>
         </div>
-        <TTFByCountryChart />
-        <FTDChart />
-        <StageStackChart />
-        <OrdersTimeChart />
-        <TATChart />
-        <TTFByHourChart />
+        <div id='area 1'>
+          <TTFByCountryChart />
+          <FTDByCountryChart />
+          <StageStackChart />
+          <OrdersTimeChart />
+        </div>
+        <div id='area 2'>
+          <TATChart />
+        </div>
+        <div id='appendix'>
+          <TTFByHourChart />
+          <FTDChart />
+          <OrdersTimeChartGranular />
+        </div>
       </section>
     )
 }
