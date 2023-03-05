@@ -95,7 +95,7 @@ export default function FTDChart() {
         plugins: {
             title: {
                 display: true,
-                text: `Time from Fulfillment to Delivery by ${option==='buyer'?'Buyer':'Vendor'} Country`,
+                text: `Time to Delivery by ${option==='buyer'?'Buyer':'Vendor'} Country`,
             },
             legend: {
                 display: false
@@ -117,7 +117,7 @@ export default function FTDChart() {
             stacked: true,
             title: {
                 display: true,
-                text: 'Hours from Fulfillment to Delivery'
+                text: 'Time to Delivery (Hours)'
             }
             },
             y: {
@@ -133,8 +133,8 @@ export default function FTDChart() {
     return (
         <div className='mb-36'>
             <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white'>
-                <option value='buyer'>Time to Fulfill by Buyer Country</option>
-                <option value='vendor'>Time to Fulfill by Vendor Country</option>
+                <option value='buyer'>Time to Delivery by Buyer Country</option>
+                <option value='vendor'>Time to Delivery by Vendor Country</option>
             </select>
             <Bar options={options} data={data} />
         </div>

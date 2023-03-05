@@ -87,7 +87,7 @@ const options = {
       };
 
   return (
-    <div id='a1q1'>
+    <div id='a1q1' className='max-h-72 w-auto'>
         <div className='text-black text-center mb-2'>
             Time to Fulfill by <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white rounded-md border border-stone-200'>
                 <option value='buyer'>Buyer Country</option>
