@@ -115,7 +115,7 @@ const options: any = {
       };
 
   return (
-    <div id='a1q1' className='mt-1 mb-52 h-80 flex justify-center border border-stone-200 rounded-xl'>
+    <div id='a1q1' className='mt-1 mb-52 max-w-6xl flex justify-center border border-stone-200 rounded-xl'>
       <div id='bottom-left' className='w-full pt-2 bg-white flex-1 rounded-xl'>
         <div className='text-black text-center text-sm'>
             Hours to Deliver by <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white rounded-md border border-stone-200'>

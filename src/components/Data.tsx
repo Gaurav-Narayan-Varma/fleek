@@ -28,19 +28,23 @@ function Data() {
             </li>
           </ul>
         </div>
-        <div id='area 1'>
-          <TTFByCountryChart />
-          <FTDByCountryChart />
-          <StageStackChart />
-          <OrdersTimeChart />
-        </div>
-        <div id='area 2'>
-          <TATChart />
-        </div>
-        <div id='appendix'>
-          <TTFByHourChart />
-          <FTDChart />
-          <OrdersTimeChartGranular />
+        <div className='max-w-full'>
+          <div id='area 1'>
+            <div>
+              <TTFByCountryChart />
+              <FTDByCountryChart />
+            </div>
+            <StageStackChart />
+            <OrdersTimeChart />
+          </div>
+          <div id='area 2'>
+            <TATChart />
+          </div>
+          <div id='appendix'>
+            <TTFByHourChart />
+            <FTDChart />
+            <OrdersTimeChartGranular />
+          </div>
         </div>
       </section>
     )

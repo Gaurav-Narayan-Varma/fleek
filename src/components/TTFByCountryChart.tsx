@@ -120,8 +120,8 @@ const options: any = {
       };
 
   return (
-    <div id='a1q1' className='h-80 flex justify-center border border-stone-200 rounded-xl'>
-      <div id='top-left' className='w-full pt-2 bg-white flex-1 rounded-xl'>
+    <div id='a1q1' className='min-h-fit flex justify-center border border-stone-200 rounded-xl'>
+      <div id='top-left' className='pt-2 bg-white flex-1 rounded-xl'>
         <div className='text-black text-sm text-center mb-2'>
             Hours to Fulfill by <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white rounded-md border border-stone-200'>
                 <option value='buyer'>Buyer Country</option>

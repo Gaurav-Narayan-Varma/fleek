@@ -3,16 +3,21 @@ import {
     CategoryScale,
     LinearScale,
     BarElement,
+    PointElement,
+    LineElement,
     Title,
     Tooltip,
     Legend,
+    LineController,
+    BarController,
 } from 'chart.js';
+
 import { useState } from 'react';
-import { Bar } from 'react-chartjs-2';
-
+import { Chart } from 'react-chartjs-2';
+import OrderCount from '../data/order_count.json'
+import OrderCountVendor from '../data/order_count_vendor.json'
 import stageVendorData from '../data/stage_vendor.json'
-// import stageBuyerDataTable from '../data/stage_buyer_table.json'
-
+import stageVendorDataTable from '../data/stage_vendor_table.json'
 import stageBuyerData from '../data/stage_buyer.json'
 import stageBuyerDataTable from '../data/stage_buyer_table.json'
 
@@ -22,7 +27,11 @@ ChartJS.register(
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    PointElement,
+    LineElement,
+    LineController,
+    BarController,
 );
 
 const vendor_labels = ['Pakistan', 'United Kingdom', 'United States', 'India', 'ROW'];
@@ -37,6 +46,7 @@ const stageVendorSets = Object.values(stageVendorData).map((stage) => {
         }
     }
     return {
+        type: 'bar' as const,
         label: nameStage,
         data: Object.values(stage).map(num => {
             if(num) {
@@ -50,7 +60,7 @@ const stageVendorSets = Object.values(stageVendorData).map((stage) => {
     }
 })
 
-const buyer_labels = ['France', 'Germany', 'United Kingdom', 'United States', 'ROW'];
+const buyer_labels = ['United Kingdom', 'United States', 'France', 'Germany', 'ROW'];
 const buyer_colors = ['#c9cbcf', '#37a2eb', '#ff9e40', '#4cc0c0', '#ffcd56', '#73d444', '#ff6384', '#9a66ff']
 
 // Build buyer datasets
@@ -62,6 +72,7 @@ const stageBuyerSets = Object.values(stageBuyerData).map((stage) => {
         }
     }
     return {
+        type: 'bar' as const,
         label: nameStage,
         data: Object.values(stage).map(num => {
             if(num) {
@@ -78,15 +89,31 @@ const stageBuyerSets = Object.values(stageBuyerData).map((stage) => {
 export default function StageStackChart() {
     const [option, setOption] = useState<string>('buyer')
 
+    const dsets: any = [{
+        type: 'line' as const,
+        label: 'total orders',
+        borderColor: '#c9cbce',
+        borderWidth: 2,
+        fill: false,
+        data: option==='buyer' ? Object.values(OrderCount[1]) : Object.values(OrderCountVendor[1]),
+        yAxisID: 'y1',
+        datalabels: {
+            color: '#36454F',
+            align: 'top',
+            offset: option==='buyer' ? '-4' : 0,
+        }
+    }]
+    const dsetsf = option === 'buyer' ? dsets.concat(stageBuyerSets) : dsets.concat(stageVendorSets)
+
     const data: any = {
         labels: option === 'buyer' ? buyer_labels : vendor_labels,
-        datasets: option === 'buyer' ? stageBuyerSets : stageVendorSets
+        datasets: [ ...dsetsf]
     };
 
     const options: any = {
         plugins: {
             title: {
-                display: true,
+                display: false,
                 text: `Average hours in each stage by country / region`,
             },
             legend: {
@@ -117,48 +144,114 @@ export default function StageStackChart() {
                     drawBorder: false,
                   },
             },
+            y1: {
+                type: 'linear' as const,
+                display: false,
+                position: 'right' as const,
+                grid: {
+                  drawBorder: false,
+                },
+              },
+            
         },
     };
 
     return (
-        <div id='a1q2' className='mb-36 flex flex-col justify-center'>
-            <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white'>
-                <option value='buyer'>Time to Fulfill by Buyer Country</option>
-                <option value='vendor'>Time to Fulfill by Vendor Country</option>
-            </select>
-            <Bar options={options} data={data} />
-            <table className='text-black border border-black self-center mt-9'>
-                <thead>
-                    <tr>
-                        <th className='border border-black'>Country</th>
-                        <th className='border border-black'>Label purchased</th>
-                        <th className='border border-black'>Label printed</th>
-                        <th className='border border-black'>Confirmed</th>
-                        <th className='border border-black'>In transit</th>
-                        <th className='border border-black'>Out for delivery</th>
-                        <th className='border border-black'>Attempted delivery</th>
-                        <th className='border border-black'>Delivered</th>
-                        <th className='border border-black'>Failure</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {Object.values(stageBuyerDataTable).map((country) => {
-                        return (
-                            <tr>
-                                <td className='border border-black'>{country.cc}</td>
-                                <td className='border border-black'>{country.label_purchased} hours</td>
-                                <td className='border border-black'>{country.label_printed} hours</td>
-                                <td className='border border-black'>{country.confirmed} hours</td>
-                                <td className='border border-black'>{country.in_transit} hours</td>
-                                <td className='border border-black'>{country.out_for_delivery} hours</td>
-                                <td className='border border-black'>{country.attempted_delivery} hours</td>
-                                <td className='border border-black'>{country.delivered} hours</td>
-                                <td className='border border-black'>{country.failure} hours</td>
+        <>
+            <div id='a1q2' className='max-w-6xl flex justify-center border border-stone-200 rounded-xl'>
+                <div id='top-left' className='w-full pt-2 bg-white basis-4/6 rounded-xl'>
+                    <div className='text-black text-sm text-center mb-2'>
+                        Average Hours Each Stage by <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white rounded-md border border-stone-200'>
+                            <option value='buyer'>Buyer Country</option>
+                            <option value='vendor'>Vendor Country</option>
+                        </select>
+                    </div>
+                    <Chart options={options} type='bar' data={data} />
+                </div>
+                {option === 'buyer' ? 
+                    <div id='top-right' className='text-black bg-white flex-1 rounded-xl flex flex-col justify-center'>
+                        <div>
+                            The less time in the 'confirmed' stage seems to correlate with more orders, as the top two markets in terms of buying, the US and the UK, have the much lower times in that stage compared to the other markets (less than 70 versus over 95)
+                        </div>
+                    </div> 
+                    :
+                    <div id='top-right' className='text-black bg-white flex-1 rounded-xl flex flex-col justify-center'>
+                        <div>
+                            Pakistan's confirmed stage is the biggest area for improvement, with packages stalled out at
+                            approximately 180 hours on average before moving the transit
+                        </div>
+                    </div> 
+                }
+            </div>
+            <div id='table-view' className='mt-4 max-w-6xl flex justify-center border bg-white border-stone-200 rounded-xl'>
+                {option==='buyer' ?
+                    <table className='border-collapse text-sm text-black border border-stone-600 self-center my-2'>
+                        <thead>
+                            <tr >
+                                <th className='border text-left border-stone-400 font-semibold'>Country</th>
+                                <th className='border text-left border-stone-400 font-semibold'>Label purchased</th>
+                                <th className='border text-left border-stone-400 font-semibold'>Label printed</th>
+                                <th className='border text-left border-stone-400 font-semibold'>Confirmed</th>
+                                <th className='border text-left border-stone-400 font-semibold'>In transit</th>
+                                <th className='border text-left border-stone-400 font-semibold'>Out for delivery</th>
+                                <th className='border text-left border-stone-400 font-semibold'>Attempted delivery</th>
+                                <th className='border text-left border-stone-400 font-semibold'>Delivered</th>
+                                <th className='border text-left border-stone-400 font-semibold'>Failure</th>
                             </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-        </div>
+                        </thead>
+                        <tbody>
+                            {Object.values(stageBuyerDataTable).map((country) => {
+                                return (
+                                    <tr>
+                                        <td className='border border-stone-400'>{country.cc}</td>
+                                        <td className='border border-stone-400'>{country.label_purchased} hours</td>
+                                        <td className='border border-stone-400'>{country.label_printed} hours</td>
+                                        <td className='border border-stone-400'>{country.confirmed} hours</td>
+                                        <td className='border border-stone-400'>{country.in_transit} hours</td>
+                                        <td className='border border-stone-400'>{country.out_for_delivery} hours</td>
+                                        <td className='border border-stone-400'>{country.attempted_delivery} hours</td>
+                                        <td className='border border-stone-400'>{country.delivered} hours</td>
+                                        <td className='border border-stone-400'>{country.failure} hours</td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
+                    :
+                    <table className='border-collapse text-sm text-black border border-stone-600 self-center my-2'>
+                        <thead className='font-thin'>
+                            <tr >
+                                <th className='border border-stone-400 font-semibold'>Country</th>
+                                <th className='border border-stone-400 font-semibold'>Label purchased</th>
+                                <th className='border border-stone-400 font-semibold'>Label printed</th>
+                                <th className='border border-stone-400 font-semibold'>Confirmed</th>
+                                <th className='border border-stone-400 font-semibold'>In transit</th>
+                                <th className='border border-stone-400 font-semibold'>Out for delivery</th>
+                                <th className='border border-stone-400 font-semibold'>Attempted delivery</th>
+                                <th className='border border-stone-400 font-semibold'>Delivered</th>
+                                <th className='border border-stone-400 font-semibold'>Failure</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Object.values(stageVendorDataTable).map((country) => {
+                                return (
+                                    <tr>
+                                        <td className='border border-stone-400'>{country.origin}</td>
+                                        <td className='border border-stone-400'>{country.label_purchased} hours</td>
+                                        <td className='border border-stone-400'>{country.label_printed} hours</td>
+                                        <td className='border border-stone-400'>{country.confirmed} hours</td>
+                                        <td className='border border-stone-400'>{country.in_transit} hours</td>
+                                        <td className='border border-stone-400'>{country.out_for_delivery} hours</td>
+                                        <td className='border border-stone-400'>{country.attempted_delivery} hours</td>
+                                        <td className='border border-stone-400'>{country.delivered} hours</td>
+                                        <td className='border border-stone-400'>{country.failure} hours</td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </>
     )
 }
