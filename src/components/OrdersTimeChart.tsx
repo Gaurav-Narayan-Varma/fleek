@@ -59,7 +59,7 @@ const sets = Object.keys(myOrdersTimeGroupedData).map((key) => {
     })
 });
 
-console.log(sets)
+// console.log(sets)
 
 const data = {
   labels,

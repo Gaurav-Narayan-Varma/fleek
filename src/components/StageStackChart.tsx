@@ -9,9 +9,12 @@ import {
 } from 'chart.js';
 import { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
-import ftdVendorData from '../data/ftd_vendor.json'
-import stageBuyerDataTable from '../data/stage_buyer_table.json'
+
+import stageVendorData from '../data/stage_vendor.json'
+// import stageBuyerDataTable from '../data/stage_buyer_table.json'
+
 import stageBuyerData from '../data/stage_buyer.json'
+import stageBuyerDataTable from '../data/stage_buyer_table.json'
 
 ChartJS.register(
     CategoryScale,
@@ -22,25 +25,33 @@ ChartJS.register(
     Legend
 );
 
-const labels = ['France', 'Germany', 'United Kingdom', 'United States', 'ROW'];
-
-function getRandomColor() {
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-    return `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
-}
+const vendor_labels = ['Pakistan', 'United Kingdom', 'United States', 'India', 'ROW'];
+const vendor_colors = ['#c9cbcf', '#37a2eb', '#ff9e40', '#4cc0c0', '#ffcd56', '#73d444', '#ff6384', '#9a66ff']
 
 // Build vendor datasets
-const ftdVendorSets = Object.values(ftdVendorData).map((country) => {
+const stageVendorSets = Object.values(stageVendorData).map((stage) => {
+    let nameStage
+    for (let key in stageVendorData) {
+        if (stageVendorData[key as keyof typeof stageVendorData] === stage) {
+            nameStage = key
+        }
+    }
     return {
-        label: country.origin,
-        data: Array.from({length: 300}, (_, index) => {
-            return country.time_to_deliver_list[0][index] > 0 ? country.time_to_deliver_list[0][index] : 0
+        label: nameStage,
+        data: Object.values(stage).map(num => {
+            if(num) {
+                return Math.round(num * 10) / 10
+            }
         }),
-        backgroundColor: getRandomColor(),
+        backgroundColor: vendor_colors.pop(),
+        datalabels: {
+            color: '#36454F',
+          },
     }
 })
+
+const buyer_labels = ['France', 'Germany', 'United Kingdom', 'United States', 'ROW'];
+const buyer_colors = ['#c9cbcf', '#37a2eb', '#ff9e40', '#4cc0c0', '#ffcd56', '#73d444', '#ff6384', '#9a66ff']
 
 // Build buyer datasets
 const stageBuyerSets = Object.values(stageBuyerData).map((stage) => {
@@ -52,27 +63,35 @@ const stageBuyerSets = Object.values(stageBuyerData).map((stage) => {
     }
     return {
         label: nameStage,
-        data: Object.values(stage),
-        backgroundColor: getRandomColor(),
+        data: Object.values(stage).map(num => {
+            if(num) {
+                return Math.round(num * 10) / 10
+            }
+        }),
+        backgroundColor: buyer_colors.pop(),
+        datalabels: {
+            color: '#36454F',
+          },
     }
 })
 
 export default function StageStackChart() {
     const [option, setOption] = useState<string>('buyer')
 
-    const data = {
-        labels,
-        datasets: stageBuyerSets
+    const data: any = {
+        labels: option === 'buyer' ? buyer_labels : vendor_labels,
+        datasets: option === 'buyer' ? stageBuyerSets : stageVendorSets
     };
 
-    const options = {
+    const options: any = {
         plugins: {
             title: {
                 display: true,
                 text: `Average hours in each stage by country / region`,
             },
             legend: {
-                display: false
+                display: true,
+                position: 'right'
             },
             tooltip: {
                 callbacks: {
@@ -85,18 +104,18 @@ export default function StageStackChart() {
         responsive: true,
         scales: {
             x: {
-            stacked: true,
-            title: {
-                display: true,
-                text: 'Country / Region'
-            }
+                stacked: true,
+                grid: {
+                    drawBorder: false,
+                    drawOnChartArea: false,
+                  }
             },
             y: {
-            stacked: true,
-            title: {
-                display: true,
-                text: 'Hours'
-            }
+                display: false,
+                stacked: true,
+                grid: {
+                    drawBorder: false,
+                  },
             },
         },
     };
