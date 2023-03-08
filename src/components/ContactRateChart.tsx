@@ -38,6 +38,9 @@ ChartJS.register(
       title: {
         display: true,
         text: 'Contact Rate MoM',
+        font: {
+          size: 24
+        }
       },
       datalabels: {
         color: '#36454F',
@@ -112,7 +115,3 @@ export default function ContactRateChart() {
       </div>
     )
 }
-
-{/* <li>⁍ With the exception of October the contact rate has been monotonically increasing since August</li>
-<li>⁍ <span className='font-bold underline'>Breakdown at supplier level not possible</span>: 
-only 2530 tickets in the dataset, but only 161 have vendors listed in custom_vendor column</li> */}

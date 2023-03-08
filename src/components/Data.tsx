@@ -8,6 +8,7 @@ import OrdersTimeChartGranular from './OrdersTimeChartGranular'
 import FTDByCountryChart from './FTDByCountryChart'
 import ContactRateChart from './ContactRateChart'
 import TouchesPerTicketChart from './TouchesPerTicket'
+import RevenueTimeChart from './RevenueTimeChart'
 
 function Data() {
     return (
@@ -38,6 +39,7 @@ function Data() {
             </div>
             <StageStackChart />
             <OrdersTimeChart />
+            <RevenueTimeChart />
           </div>
           <div id='area 2'>
             <ContactRateChart />

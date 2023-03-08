@@ -13,6 +13,8 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import OrdersTimeGroupedData from '../data/orders_time_grouped.json'
+import { useRef, useEffect } from "react";  
+import './show.css'
 
 interface CountryData {
     [country: string]: {
@@ -42,6 +44,9 @@ const options: any = {
     title: {
       display: true,
       text: 'Market Size by Orders',
+      font: {
+        size: 24
+      }
     },
     scales: {
       y: {
@@ -92,12 +97,46 @@ const data: any = {
 };
 
 export default function OrdersTimeChart() {
+  const myRef = useRef<Array<HTMLDivElement>>([])
+
+
+  useEffect(()=>{
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show')
+        } else {
+          entry.target.classList.remove('show')
+        }
+      })
+    })
+    if (myRef.current) {
+      myRef.current.forEach((el) => {
+        observer.observe(el);
+      })
+    }
+  },[])
+
+  function addToRef(el: any) {
+    myRef.current.push(el)
+  }
+
   return (
-    <div id='market-size' className='max-w-6xl mt-36 mb-52 h-80 flex justify-center border border-stone-200 rounded-xl bg-white'>
-      <Line options={options} data={data} />
-      <div className='text-black flex-1 rounded-xl flex flex-col justify-center px-4'>
-        <div>The top three buyer markets for orders showed a positive correlation between shorter delivery times and higher demand, with lower delivery times associated with higher numbers of orders</div>
-      </div> 
+    <div id='market-size-orders'>
+      <div id='chart' ref={addToRef} className='opacity-0 transition-all translate-x-full duration-1000 max-w-6xl mt-36 h-80 flex justify-center border border-stone-200 rounded-xl bg-white'>
+        <Line options={options} data={data} />
+        <div id='analysis-section' className='text-black flex-1 rounded-xl flex flex-col justify-center px-8'>
+          <div ref={addToRef} id='bullet' className='opacity-0 transition-all translate-x-full duration-1000 delay-200 text-black text-center mt-2 font-semibold italic text-lg basis-1/6'>
+          Key Takeaways
+          </div>
+          <div ref={addToRef} id='bullet' className='opacity-0 transition-all translate-x-full duration-1000 delay-300 before:content-["💪"] before:absolute before:-ml-5 before:mt-3 basis-1/3'>
+          Despite drops in US, German, UK, and ROW markets in Nov. and Dec., France remained the most robust   
+          </div>
+          <div ref={addToRef} id='bullet' className='opacity-0 transition-all translate-x-full duration-1000 delay-500 before:content-["☯️"] before:absolute before:-ml-5 before:mt-2.5 basis-1/3'>
+          UK is the biggest and most volatile market, with significant drops in Jul. and Dec., but sharp increases in Jan. and May
+          </div>
+        </div> 
+      </div>
     </div>
   )
 }

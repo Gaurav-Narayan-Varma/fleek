@@ -30,6 +30,9 @@ const options: any = {
       title: {
         display: true,
         text: 'Touches per Ticket by Issue Type MoM',
+        font: {
+            size: 24
+          }
       },
       datalabels: {
         color: '#36454F',
@@ -136,7 +139,7 @@ const options: any = {
     }
 
     return (
-        <div id='touches-per-ticket' >
+        <div id='touches-per-ticket'>
             <div id='chart' ref={addToRef} className='opacity-0 transition-all -translate-x-full duration-1000 max-w-6xl mt-36 mb-52 flex flex-col justify-center border bg-white border-stone-200 rounded-xl'>
                 <div className="mx-44">
                     <Bar options={options} data={data} />

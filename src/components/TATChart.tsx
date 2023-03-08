@@ -30,6 +30,9 @@ ChartJS.register(
       title: {
         display: true,
         text: 'Turn Around Time by Issue Type MoM',
+        font: {
+          size: 24
+        }
       },
       datalabels: {
         color: '#36454F',

@@ -20,6 +20,8 @@ import stageVendorData from '../data/stage_vendor.json'
 import stageVendorDataTable from '../data/stage_vendor_table.json'
 import stageBuyerData from '../data/stage_buyer.json'
 import stageBuyerDataTable from '../data/stage_buyer_table.json'
+import { useRef, useEffect } from "react";  
+import './show.css'
 
 ChartJS.register(
     CategoryScale,
@@ -35,7 +37,7 @@ ChartJS.register(
 );
 
 const vendor_labels = ['Pakistan', 'United Kingdom', 'United States', 'India', 'ROW'];
-const vendor_colors = ['#c9cbcf', '#37a2eb', '#ff9e40', '#4cc0c0', '#ffcd56', '#73d444', '#ff6384', '#9a66ff']
+const vendor_colors = ['#ff6384', '#37a2eb', '#ff9e40', '#4cc0c0', '#ffcd56', '#73d444', '#c9cbcf', '#9a66ff']
 
 // Build vendor datasets
 const stageVendorSets = Object.values(stageVendorData).map((stage) => {
@@ -61,7 +63,7 @@ const stageVendorSets = Object.values(stageVendorData).map((stage) => {
 })
 
 const buyer_labels = ['United Kingdom', 'United States', 'France', 'Germany', 'ROW'];
-const buyer_colors = ['#c9cbcf', '#37a2eb', '#ff9e40', '#4cc0c0', '#ffcd56', '#73d444', '#ff6384', '#9a66ff']
+const buyer_colors = ['#ff6384', '#37a2eb', '#ff9e40', '#4cc0c0', '#ffcd56', '#73d444', '#c9cbcf', '#9a66ff']
 
 // Build buyer datasets
 const stageBuyerSets = Object.values(stageBuyerData).map((stage) => {
@@ -88,11 +90,34 @@ const stageBuyerSets = Object.values(stageBuyerData).map((stage) => {
 
 export default function StageStackChart() {
     const [option, setOption] = useState<string>('buyer')
+    const myRef = useRef<Array<HTMLDivElement>>([])
+
+
+    useEffect(()=>{
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('show')
+          } else {
+            entry.target.classList.remove('show')
+          }
+        })
+      })
+      if (myRef.current) {
+        myRef.current.forEach((el) => {
+          observer.observe(el);
+        })
+      }
+    },[])
+  
+    function addToRef(el: any) {
+      myRef.current.push(el)
+    }
 
     const dsets: any = [{
         type: 'line' as const,
         label: 'total orders',
-        borderColor: '#c9cbce',
+        borderColor: '#ff6384',
         borderWidth: 2,
         fill: false,
         data: option==='buyer' ? Object.values(OrderCount[1]) : Object.values(OrderCountVendor[1]),
@@ -152,16 +177,15 @@ export default function StageStackChart() {
                   drawBorder: false,
                 },
               },
-            
         },
     };
 
     return (
-        <>
-            <div id='a1q2' className='max-w-6xl flex justify-center border border-stone-200 rounded-xl'>
+        <div id='time-in-stage'>
+            <div id='chart' ref={addToRef} className='opacity-0 transition-all translate-x-full duration-1000 max-w-6xl flex justify-center border border-stone-200 rounded-xl'>
                 <div id='top-left' className='w-full pt-2 bg-white basis-4/6 rounded-xl'>
-                    <div className='text-black text-sm text-center mb-2'>
-                        Average Hours Each Stage by <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white rounded-md border border-stone-200'>
+                    <div className='text-stone-700 font-bold text-xl text-center mb-2'>
+                        Average Hours Each Stage by <select onChange={(e) => setOption(e.target.value)} className='text-stone-700 bg-white rounded-md border border-stone-200'>
                             <option value='buyer'>Buyer Country</option>
                             <option value='vendor'>Vendor Country</option>
                         </select>
@@ -169,21 +193,32 @@ export default function StageStackChart() {
                     <Chart options={options} type='bar' data={data} />
                 </div>
                 {option === 'buyer' ? 
-                    <div id='top-right' className='text-black bg-white flex-1 rounded-xl flex flex-col justify-center'>
-                        <div>
-                            The less time in the 'confirmed' stage seems to correlate with more orders, as the top two markets in terms of buying, the US and the UK, have the much lower times in that stage compared to the other markets (less than 70 versus over 95)
+                    <div id='analysis-section' className='text-black flex-1 rounded-xl flex flex-col justify-center px-8 bg-white'>
+                        <div id='bullet' className='opacity-1 transition-all duration-1000 delay-200 text-black text-center mt-2 font-semibold italic text-lg basis-1/6'>
+                        Key Takeaways
+                        </div>
+                        <div id='bullet' className='opacity-1 transition-all duration-1000 delay-300 before:content-["🧾"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
+                        Less time to confirm order correlates with more orders for top three markets       
+                        </div>
+                        <div id='bullet' className='opacity-1 transition-all duration-1000 delay-500 before:content-["🛠️"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
+                        Opportunity to reduce failures in UK and ROW markets, which stand out by margin 
                         </div>
                     </div> 
                     :
-                    <div id='top-right' className='text-black bg-white flex-1 rounded-xl flex flex-col justify-center'>
-                        <div>
-                            Pakistan's confirmed stage is the biggest area for improvement, with packages stalled out at
-                            approximately 180 hours on average before moving the transit
+                    <div id='analysis-section' className='text-black flex-1 rounded-xl flex flex-col justify-center px-8 bg-white'>
+                        <div id='bullet' className='opacity-1 transition-all duration-1000 delay-200 text-black text-center mt-2 font-semibold italic text-lg basis-1/6'>
+                        Key Takeaways
+                        </div>
+                        <div id='bullet' className='opacity-1 transition-all duration-1000 delay-300 before:content-["❗"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
+                        US in transit time substantially greater than three other top vendor countries       
+                        </div>
+                        <div id='bullet' className='opacity-1 transition-all duration-1000 delay-500 before:content-["🏆"] before:absolute before:-ml-7 before:mt-5 basis-1/3'>
+                        The UK has 2nd lowest transit and confirmation times, a near-zero failure rate, and the lowest overall time 
                         </div>
                     </div> 
                 }
             </div>
-            <div id='table-view' className='mt-4 max-w-6xl flex justify-center border bg-white border-stone-200 rounded-xl'>
+            <div id='chart' ref={addToRef} className='opacity-0 transition-all translate-x-full duration-1000 mt-1 max-w-6xl flex justify-center border bg-white border-stone-200 rounded-xl'>
                 {option==='buyer' ?
                     <table className='border-collapse text-sm text-black border border-stone-600 self-center my-2'>
                         <thead>
@@ -252,6 +287,13 @@ export default function StageStackChart() {
                     </table>
                 }
             </div>
-        </>
+        </div>
     )
 }
+
+// The less time in the 'confirmed' stage seems to correlate with more orders, as the top two markets 
+// in terms of buying, the US and the UK, have the much lower times in that stage compared to the other 
+// markets (less than 70 versus over 95)
+
+// Pakistan's confirmed stage is the biggest area for improvement, with packages stalled out at
+//                             approximately 180 hours on average before moving the transit
