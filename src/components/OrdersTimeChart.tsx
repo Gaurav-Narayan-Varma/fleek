@@ -46,8 +46,8 @@ const options: any = {
     scales: {
       y: {
         type: 'linear' as const,
-        display: false,
         position: 'left' as const,
+        display: false,
       },
       x: {
         grid: {
@@ -72,6 +72,7 @@ const sets = Object.keys(myOrdersTimeGroupedData).map((key) => {
         data: Object.values(myOrdersTimeGroupedData[key]),
         borderColor: `${lineColor}`,
         backgroundColor: `${lineColor}`,
+        yAxisID: 'y',
         datalabels: {
           color: '#36454F',
           align: 'top',
@@ -80,7 +81,6 @@ const sets = Object.keys(myOrdersTimeGroupedData).map((key) => {
             size: 10
           }
         },
-        yAxisID: 'y',
     })
 });
 

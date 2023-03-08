@@ -1,3 +1,4 @@
+import React from "react";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -8,7 +9,6 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import TatData from '../data/tat.json'
   
 ChartJS.register(
   CategoryScale,
@@ -18,8 +18,8 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-  
-  const options: any = {
+
+const options: any = {
     plugins: {
       legend: {
         color: 'black',
@@ -27,7 +27,7 @@ ChartJS.register(
       },
       title: {
         display: true,
-        text: 'Turn Around Time by Issue Type MoM',
+        text: 'Touches per Ticket by Issue Type MoM',
       },
       datalabels: {
         color: '#36454F',
@@ -62,48 +62,53 @@ ChartJS.register(
     datasets: [
       {
         label: 'Customs',
-        data: Object.values(TatData.customs).map(num => {if(num){return Number(num.toFixed(1))}}),
+        data: [null, 3.5, 2.9, 3.9, 1.6, 1.0],
         backgroundColor: 'rgb(255, 99, 132)',
       },
       {
         label: 'CX confirmation',
-        data: Object.values(TatData.cx_confirmation).map(num => {if(num){return Number(num.toFixed(1))}}),
+        data: [4.0, 3.0, 2.4, 1.6, null, null],
+        backgroundColor: '#9a66ff',
+      },
+      {
+        label: 'Order status',
+        data: [3.1, 3.1, 3.2, 2.5, 2.1, 1.2],
         backgroundColor: 'rgb(75, 192, 192)',
       },
       {
         label: 'Interal ops',
-        data: Object.values(TatData['internal_/_ops']).map(num => {if(num){return Number(num.toFixed(1))}}),
+        data: [null, 1.9, 2.0, 1.0, 2.0, null],
         backgroundColor: 'rgb(53, 162, 235)',
       },
       {
         label: 'Items unavailable',
-        data: Object.values(TatData.items_unavailable).map(num => {if(num){return Number(num.toFixed(1))}}),
+        data: [null, null, null, null, null, 1.0],
         backgroundColor: '#ffcd56',
       },
       {
         label: 'Other',
-        data: Object.values(TatData.other).map(num => {if(num){return Number(num.toFixed(1))}}),
+        data: [null, 2.0, 1.3, 1.5, 1.9, 1.8],
         backgroundColor: '#c9cbce',
       },
       {
         label: 'Product not as described',
-        data: Object.values(TatData.product_not_as_described).map(num => {if(num){return Number(num.toFixed(1))}}),
+        data: [null, 2.9, 2.8, 1.7, null, null],
         backgroundColor: 'rgb(255, 105, 180)',
       },
       {
         label: 'Product quality',
-        data: Object.values(TatData.product_quality).map(num => {if(num){return Number(num.toFixed(1))}}),
+        data: [2.0, 2.8, 2.5, 3.8, 3.4, 1.2],
         backgroundColor: '#73d443',
       },
       {
         label: 'Vendor related',
-        data: Object.values(TatData.vendor_related).map(num => {if(num){return Number(num.toFixed(1))}}),
+        data: [null, 1.9, 1.6, 1.5, null, null],
         backgroundColor: 'rgb(255, 128, 113)',
       },
     ],
   };
   
-  export default function TATChart() {
+  export default function TouchesPerTicketChart() {
     return (
         <div id='turn-around-time' className='max-w-6xl mt-36 mb-52 h-80 flex justify-center border bg-white border-stone-200 rounded-xl'>
           <Bar options={options} data={data} />

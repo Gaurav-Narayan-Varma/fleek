@@ -6,6 +6,8 @@ import TTFByCountryChart from './TTFByCountryChart'
 import OrdersTimeChart from './OrdersTimeChart'
 import OrdersTimeChartGranular from './OrdersTimeChartGranular'
 import FTDByCountryChart from './FTDByCountryChart'
+import ContactRateChart from './ContactRateChart'
+import TouchesPerTicketChart from './TouchesPerTicket'
 
 function Data() {
     return (
@@ -38,7 +40,9 @@ function Data() {
             <OrdersTimeChart />
           </div>
           <div id='area 2'>
+            <ContactRateChart />
             <TATChart />
+            <TouchesPerTicketChart />
           </div>
           <div id='appendix'>
             <TTFByHourChart />
