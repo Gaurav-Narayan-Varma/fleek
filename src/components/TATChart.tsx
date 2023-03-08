@@ -51,7 +51,7 @@ ChartJS.register(
         stacked: true,
         title: {
             display: true,
-            text: 'Turn Around Time (in hours)'
+            text: 'Turn Around Time (Hours)'
         }
       },
     },

@@ -51,7 +51,7 @@ const options: any = {
         stacked: true,
         title: {
             display: true,
-            text: 'Turn Around Time (in hours)'
+            text: 'Touches Per Ticket'
         }
       },
     },
@@ -138,21 +138,20 @@ const options: any = {
     return (
         <div id='touches-per-ticket' >
             <div id='chart' ref={addToRef} className='opacity-0 transition-all -translate-x-full duration-1000 max-w-6xl mt-36 mb-52 flex flex-col justify-center border bg-white border-stone-200 rounded-xl'>
-            <div className="mx-44">
-                <Bar options={options} data={data} />
-            </div>
-            <div id='analysis-section' className='text-black flex-1 rounded-xl flex justify-center mx-6 my-6 gap-12'>
-                <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-200 text-black text-center mt-2 font-semibold italic text-lg basis-1/6'>
-                Key Takeaways
+                <div className="mx-44">
+                    <Bar options={options} data={data} />
                 </div>
-                <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-300 before:content-["🚚💨"] before:absolute before:-ml-10 before:mt-2.5 basis-1/3'>
-                Since October the number of touches per ticket has dropped dramatically
-                </div>
-                <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-500 before:content-["⏰"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
-                Average TAT is higher than norm of average of 5 hours 
-                (<a className='text-blue-500' href='https://www.liveagent.com/research/customer-service-benchmarks/'>Live Agent 2023 Report</a>)
-                </div>
-            </div> 
+                <div id='analysis-section' className='text-black flex-1 rounded-xl flex justify-center mx-6 my-6 gap-12'>
+                    <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-200 text-black text-center mt-2 font-semibold italic text-lg basis-1/6'>
+                    Key Takeaways
+                    </div>
+                    <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-300 before:content-["🗣️"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
+                    Product quality & order status issues have higher average number of touches per ticket 
+                    </div>
+                    <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-500 before:content-["❗"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
+                    Product quality & order status issues are the only issues to persist across all 6 months 
+                    </div>
+                </div> 
             </div>
         </div>
     )
