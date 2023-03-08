@@ -22,7 +22,7 @@ function Data() {
               <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#a1q2'>Understanding end to end delivery times for an order - Area 1: Question 2</a>
             </li>
             <li className='mb-2 inline-block transition ease-in-out delay-50'>
-              <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#a2q2'>Understanding turn around times - Area 2: Question 2</a>
+              <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#turn-around-time'>Understanding turn around times - Area 2: Question 2</a>
             </li>
             <br></br>
             <li className='mb-2 inline-block transition ease-in-out delay-50'>

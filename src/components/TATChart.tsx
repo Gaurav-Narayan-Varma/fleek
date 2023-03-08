@@ -9,7 +9,9 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import TatData from '../data/tat.json'
-  
+import { useRef, useEffect, RefObject } from 'react';  
+import './show.css'
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -23,7 +25,7 @@ ChartJS.register(
     plugins: {
       legend: {
         color: 'black',
-        position: 'bottom'
+        position: 'right'
       },
       title: {
         display: true,
@@ -104,23 +106,49 @@ ChartJS.register(
   };
   
   export default function TATChart() {
+    const myRef = useRef<Array<HTMLDivElement>>([])
+
+
+    useEffect(()=>{
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('show')
+          } else {
+            entry.target.classList.remove('show')
+          }
+        })
+      })
+      if (myRef.current) {
+        myRef.current.forEach((el) => {
+          observer.observe(el);
+        })
+      }
+    },[])
+
+    function addToRef(el: any) {
+      myRef.current.push(el)
+    }
+
     return (
-        <div id='turn-around-time' className='max-w-6xl mt-36 mb-52 h-80 flex justify-center border bg-white border-stone-200 rounded-xl'>
-          <Bar options={options} data={data} />
-          <div className='text-black flex-1 rounded-xl flex flex-col justify-center px-4'>
-            <div>
-              The top three buyer markets for orders show <span className='font-bold underline'>a positive correlation 
-              between shorter delivery times and higher demand</span>
-              , with lower delivery times associated with higher numbers of orders
+      <div id='turn-around-time'>
+        <div id='chart' ref={addToRef} className='opacity-0 transition-all -translate-x-full duration-1000 max-w-6xl mt-36 mb-52 flex flex-col justify-center border bg-white border-stone-200 rounded-xl'>
+          <div className='mx-44'>
+            <Bar options={options} data={data} />
+          </div>
+          <div id='analysis-section' className='text-black flex-1 rounded-xl flex justify-center mx-6 my-6 gap-12'>
+            <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-200 text-black text-center mt-2 font-semibold italic text-lg basis-1/6'>
+              Key Takeaways
             </div>
-            <br></br>
-            <div>
-              Fleek's <span className='font-bold underline'>average TAT is higher than average</span>: 
-              the industry standard is 5 hr according to a report by   
-              <a className='text-blue-500' href='https://www.liveagent.com/research/customer-service-benchmarks/'> Live Agent</a>
-              , a help desk software company
+            <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-300 before:content-["🚚💨"] before:absolute before:-ml-10 before:mt-2.5 basis-1/3'>
+              Lower delivery times are correlated with order size for the top three buyer markets
+            </div>
+            <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-500 before:content-["⏰"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
+              Average TAT is higher than the industry average of 5 hours 
+              (<a className='text-blue-500' href='https://www.liveagent.com/research/customer-service-benchmarks/'>Live Agent 2023 Report</a>)
             </div>
           </div> 
         </div>
+      </div>
     )
 }
