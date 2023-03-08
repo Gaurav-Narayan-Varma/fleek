@@ -12,7 +12,7 @@ import RevenueTimeChart from './RevenueTimeChart'
 
 function Data() {
     return (
-      <section id='page-container' className='flex flex-col bg-gray-50 w-screen pt-12 px-12'>
+      <section id='page-container' className='flex flex-col bg-gray-50 w-screen pt-12 px-6'>
         <div className='h-screen'>
           <h1 className='text-black font-bold mb-4'>Table of Contents</h1>
           <ul className='pl-4 mb-6'>

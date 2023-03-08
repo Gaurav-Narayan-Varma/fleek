@@ -14,6 +14,8 @@ import {
 import { Chart } from 'react-chartjs-2';
 import OrderCount from '../data/order_count.json'
 import OrderCountVendor from '../data/order_count_vendor.json'
+import { useRef, useEffect } from "react";  
+import './show.css'
 
 ChartJS.register(
   LinearScale,
@@ -61,7 +63,28 @@ const options: any = {
 
   export default function FTDByCountryChart() {
       const [option, setOption] = useState<string>('buyer')
-      
+      const myRef = useRef<Array<HTMLDivElement>>([])
+
+      useEffect(()=>{
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('show')
+            } else {
+              entry.target.classList.remove('show')
+            }
+          })
+        })
+        if (myRef.current) {
+          myRef.current.forEach((el) => {
+            observer.observe(el);
+          })
+        }
+      },[])
+    
+      function addToRef(el: any) {
+        myRef.current.push(el)
+      }
       const data: any = {
         labels: option==='buyer' ? buyerLabels : vendorLabels,
         datasets: [
@@ -115,27 +138,43 @@ const options: any = {
       };
 
   return (
-    <div id='a1q1' className='mt-1 mb-52 max-w-6xl flex justify-center border border-stone-200 rounded-xl'>
-      <div id='bottom-left' className='w-full pt-2 bg-white flex-1 rounded-xl'>
-        <div className='text-black text-center text-sm'>
-            Hours to Deliver by <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white rounded-md border border-stone-200'>
-                <option value='buyer'>Buyer Country</option>
-                <option value='vendor'>Vendor Country</option>
-            </select>
+    <div id='delivery-times'>
+      <div id='chart' ref={addToRef} className='opacity-0 w-full transition-all translate-x-full duration-1000 mt-1 mb-52 flex gap-4 bg-white justify-center border border-stone-200 rounded-xl'>
+        <div id='bottom-left' className='w-full pt-2 bg-white flex-1 rounded-xl basis-1/12'>
+          <div className='text-stone-700 font-bold text-xl text-center'>
+              Hours to Deliver by <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white rounded-md border border-stone-200'>
+                  <option value='buyer'>Buyer Country</option>
+                  <option value='vendor'>Vendor Country</option>
+              </select>
+          </div>
+          <Chart options={options} type='bar' data={data} />
         </div>
-        <Chart options={options} type='bar' data={data} />
+        {option === 'buyer' ? 
+          <div id='analysis-section' className='text-black flex-1 rounded-xl flex flex-col justify-center px-8 bg-white'>
+            <div id='bullet' className='opacity-1 transition-all duration-1000 delay-200 text-black text-center mt-2 font-semibold italic text-lg basis-1/6'>
+              Key Takeaways
+            </div>
+            <div id='bullet' className='opacity-1 transition-all duration-1000 delay-300 before:content-["🚀"] before:text-2xl before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
+              Quicker delivery times correlate with more orders across top four markets       
+            </div>
+            <div id='bullet' className='opacity-1 transition-all duration-1000 delay-500 before:content-["🐌"] before:text-2xl before:absolute before:-ml-7 before:-mt-1.5 basis-1/3'>
+              France faces longest average and median fulfillment times 
+            </div>
+        </div> 
+        :
+        <div id='analysis-section' className='text-black flex-1 rounded-xl flex flex-col justify-center px-8 bg-white'>
+          <div id='bullet' className='opacity-1 transition-all duration-1000 delay-200 text-black text-center mt-2 font-semibold italic text-lg basis-1/6'>
+            Key Takeaways
+          </div>
+          <div id='bullet' className='opacity-1 transition-all duration-1000 delay-300 before:content-["🤔"] before:text-2xl before:absolute before:-ml-7 before:mt-2 basis-1/3'>
+            Similar to vendor fulfillment patterns, quicker delivery times correlate with less orders        
+          </div>
+          <div id='bullet' className='opacity-1 transition-all duration-1000 delay-500 before:content-["💡"] before:text-2xl before:absolute before:-ml-7 before:mt-2 basis-1/3'>
+            Again, this could be because customers factors like pricing, marketing, etc. far outweight delivery time 
+          </div>
+        </div> 
+        }
       </div>
-      {option === 'buyer' ? 
-      <div id='top-right' className='text-black bg-white flex-1 rounded-xl flex flex-col justify-center'>
-        <div>The top three buyer markets for orders showed a positive correlation between shorter delivery times and higher demand, with lower delivery times associated with higher numbers of orders</div>
-      </div> 
-      :
-      <div id='top-right' className='text-black bg-white flex-1 rounded-xl flex flex-col justify-center'>
-        <div>Similar to fulfillment times, in the top three seller markets for orders lower delivery times correlated with lower numbers of orders</div>
-        <br></br>
-        <div>As said before, this could mean customers place greater weight on factors such as pricing, marketing, or product availability than on fulfillment times</div>
-      </div> 
-      }
     </div>
   )
 }
