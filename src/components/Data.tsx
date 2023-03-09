@@ -17,7 +17,7 @@ export default function Data() {
         <h1 className='text-black font-bold mb-4'>Table of Contents</h1>
         <ul className='pl-4 mb-6'>
           <li className='mb-2 text-black inline-block transition ease-in-out delay-50'>
-            🚚 Fullfilment
+            🚚 Fulfillment
           </li>
           <br></br>
           <li className='ml-6 mb-2 inline-block transition ease-in-out delay-50'>
