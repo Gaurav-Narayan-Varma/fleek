@@ -147,11 +147,11 @@ const options: any = {
                     <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-200 text-black text-center mt-2 font-semibold italic text-lg basis-1/6'>
                     Key Takeaways
                     </div>
-                    <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-300 before:content-["🗣️"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
-                    Product quality & order status issues have higher average number of touches per ticket 
+                    <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-300 before:content-["❗"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
+                    Quality/order status have higher touches per ticket on average, only issues to persist across 6 months
                     </div>
-                    <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-500 before:content-["❗"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
-                    Product quality & order status issues are the only issues to persist across all 6 months 
+                    <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-500 before:content-["⏬"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
+                    Lower number of types of issues addressed in last two months 
                     </div>
                 </div> 
             </div>

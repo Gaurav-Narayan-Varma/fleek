@@ -190,7 +190,7 @@ export default function RevenueTimeChart() {
           Key Takeaways
           </div>
           <div ref={addToRef} id='bullet' className='opacity-0 transition-all translate-x-full duration-1000 delay-300 before:content-["🏆"] before:absolute before:-ml-5 before:mt-2.5 basis-1/3'>
-          UK market is the largest, fastest growing market, and market share dominates       
+          UK market is the largest, fastest growing market by revenue- market share dominates       
           </div>
           <div ref={addToRef} id='bullet' className='opacity-0 transition-all translate-x-full duration-1000 delay-500 before:content-["🏎️"] before:absolute before:-ml-5 before:mt-2.5 basis-1/3'>
           Outside of UK, Frances shows fastest growth rate multiplying at 8x over past 6 months 

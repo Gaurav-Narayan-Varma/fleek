@@ -201,7 +201,7 @@ export default function StageStackChart() {
                         Less time to confirm order correlates with more orders for top three markets       
                         </div>
                         <div id='bullet' className='opacity-1 transition-all duration-1000 delay-500 before:content-["🛠️"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
-                        Opportunity to reduce failures in UK and ROW markets, which stand out by margin 
+                        'Failure' packages in UK and ROW markets higher, significant area to improve 
                         </div>
                     </div> 
                     :
@@ -210,10 +210,10 @@ export default function StageStackChart() {
                         Key Takeaways
                         </div>
                         <div id='bullet' className='opacity-1 transition-all duration-1000 delay-300 before:content-["❗"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
-                        US in transit time substantially greater than three other top vendor countries       
+                        US transit time higher than other top vendor countries       
                         </div>
-                        <div id='bullet' className='opacity-1 transition-all duration-1000 delay-500 before:content-["🏆"] before:absolute before:-ml-7 before:mt-5 basis-1/3'>
-                        The UK has 2nd lowest transit and confirmation times, a near-zero failure rate, and the lowest overall time 
+                        <div id='bullet' className='opacity-1 transition-all duration-1000 delay-500 before:content-["🏆"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
+                        UK has 2nd lowest transit/confirmation times, ~0 failure rate, and lowest time 
                         </div>
                     </div> 
                 }

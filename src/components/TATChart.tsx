@@ -151,7 +151,7 @@ ChartJS.register(
               (<a className='text-blue-500' href='https://www.liveagent.com/research/customer-service-benchmarks/'>2023 Report</a>)
             </div>
             <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-700 before:content-["🧰"] before:absolute before:-ml-6 before:mt-2.5 basis-1/3'>
-              Quality & customs main areas to improve- make up majority of TAT most months
+              Quality & customs main areas to improve- ~50% of TAT most months
             </div>
           </div> 
         </div>

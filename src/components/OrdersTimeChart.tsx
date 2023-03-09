@@ -128,10 +128,10 @@ export default function OrdersTimeChart() {
           Key Takeaways
           </div>
           <div ref={addToRef} id='bullet' className='opacity-0 transition-all translate-x-full duration-1000 delay-300 before:content-["💪"] before:absolute before:-ml-5 before:mt-3 basis-1/3'>
-          Despite drops in US, German, UK, and ROW markets in Nov. and Dec., France remained the most robust   
+          While UK, US, Germany, and ROW markets dipped in Nov/Dec, France grew robustly   
           </div>
           <div ref={addToRef} id='bullet' className='opacity-0 transition-all translate-x-full duration-1000 delay-500 before:content-["☯️"] before:absolute before:-ml-5 before:mt-2.5 basis-1/3'>
-          UK is the biggest and most volatile market, with significant drops in Jul. and Dec., but sharp increases in Jan. and May
+          UK is biggest yet most volatile order market, with nosedives in Jul/Dec, but sharp increases in Jan/May
           </div>
         </div> 
       </div>

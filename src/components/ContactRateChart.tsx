@@ -104,13 +104,13 @@ export default function ContactRateChart() {
             Key Takeaways
             </div>
             <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-300 before:content-["📈"] before:absolute before:-ml-7 before:mt-2.5 basis-3/12'>
-            The contact rate trending upwards since Aug.
+            Contact rate trending upwards since Aug.
             </div>
             <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-500 before:content-["🚫"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
-            Difficult to break down by supplier ({`>`} 161 tickets list vendor) 
+            Difficult to break down by supplier ({`<`} 161 tickets list vendor) 
             </div>
             <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-700 before:content-["🔨"] before:absolute before:-ml-7 before:mt-2.5 basis-5/12'>
-            Syed is biggest opportunity: represents over 1/3 of tickets listing vendor
+            1/3+ of vendor-tagged tickets are for Syed, indicating significant need for improvement
             </div>
           </div> 
         </div>

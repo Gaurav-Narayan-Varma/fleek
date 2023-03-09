@@ -176,7 +176,7 @@ const options: any = {
             Slower fulfillment times correlate with more orders for top three markets        
           </div>
           <div id='bullet' className='opacity-1 transition-all duration-1000 delay-500 before:content-["💡"] before:text-2xl before:absolute before:-ml-7 before:mt-2 basis-1/3'>
-            This is possibly due to customers caring more about factors like pricing, marketing, etc. 
+            Factors such as pricing and marketing may outweigh delivery time for customers
           </div>
         </div> 
         }

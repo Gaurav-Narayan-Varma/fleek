@@ -167,10 +167,10 @@ const options: any = {
             Key Takeaways
           </div>
           <div id='bullet' className='opacity-1 transition-all duration-1000 delay-300 before:content-["🤔"] before:text-2xl before:absolute before:-ml-7 before:mt-2 basis-1/3'>
-            Similar to vendor fulfillment patterns, quicker delivery times correlate with less orders        
+            Slower delivery times correlate with more orders, similar to vendor fulfillment        
           </div>
           <div id='bullet' className='opacity-1 transition-all duration-1000 delay-500 before:content-["💡"] before:text-2xl before:absolute before:-ml-7 before:mt-2 basis-1/3'>
-            Again, this could be because customers factors like pricing, marketing, etc. far outweight delivery time 
+            Likewise, factors such as pricing and marketing may outweigh delivery time 
           </div>
         </div> 
         }
