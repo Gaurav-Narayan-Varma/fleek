@@ -32,7 +32,7 @@ function Coding() {
     const [stage, setStage] = useState<string>('all')
     const [modal, setModal] = useState<boolean>(false)
     const [modalData, setModalData] = useState<ModalData | null>(null)
-  
+
     function handleStageClick(e: MouseEvent<HTMLDivElement>) {
       if (e.currentTarget.textContent != null) {
         let s = e.currentTarget.textContent
@@ -84,20 +84,37 @@ function Coding() {
   
     // Fetching all trackers
     useEffect(() => {
-      fetch('https://api.ship24.com/public/v1/trackers', {
-        method: 'GET',
-        headers: {
-          'Authorization': 'Bearer apik_Ou1osZfT04pF7mpyMiWDyGdFowtpIP',
-        }
-      })
-      .then(response => response.json())
-      .then(data => setTrackers(data.data.trackers))
-      .catch(error => console.error(error))
+      const promises = [];
+
+      for (let i = 1; i < 3; i++) {
+        const promise = fetch(`https://api.ship24.com/public/v1/trackers?page=${i}&limit=40`, {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer apik_Ou1osZfT04pF7mpyMiWDyGdFowtpIP',
+          }
+        })
+        .then(response => response.json())
+        .then(data => data.data.trackers)
+        .catch(error => console.error(error));
+        
+        promises.push(promise);
+      }
+
+      Promise.all(promises)
+        .then(trackersArrays => {
+          const trackers = trackersArrays.flat();
+          setTrackers(trackers);
+        })
+        .catch(error => console.error(error));
     }, [])
   
+    console.log(trackers)
+    
     // Fetch data for each TrackerId and create parcel component
     useEffect(() => {
-      const batchSize = 9;
+      console.log('tracker number:', trackers)
+
+      const batchSize = 8;
       let currentIndex = 0;
 
       function fetchTrackers() {
@@ -136,8 +153,8 @@ function Coding() {
     }, [trackers])
 
     return(
-        <section id='page-container' className='flex w-screen'>
-          <section id='parcel-dashboard' className='w-full h-screen bg-gray-50'>
+        <section id='page-container' className='flex w-screen min-h-screen'>
+          <section id='parcel-dashboard' className='w-full bg-gray-50'>
             { modal && 
             <div id='modal-section'>
                 <div id='overlay' onClick={closeModal} className="fixed left-0 top-0 w-screen h-screen bg-black bg-opacity-60"/>

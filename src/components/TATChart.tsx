@@ -139,16 +139,19 @@ ChartJS.register(
           <div className='mx-44'>
             <Bar options={options} data={data} />
           </div>
-          <div id='analysis-section' className='text-black flex-1 rounded-xl flex justify-center mx-6 my-6 gap-12'>
+          <div id='analysis-section' className='text-black flex-1 rounded-xl flex justify-center mx-6 my-6 gap-8'>
             <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-200 text-black text-center mt-2 font-semibold italic text-lg basis-1/6'>
               Key Takeaways
             </div>
-            <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-300 before:content-["🚚💨"] before:absolute before:-ml-10 before:mt-2.5 basis-1/3'>
-              Lower delivery times are correlated with order size for the top three buyer markets
+            <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-300 before:content-["✨"] before:absolute before:-ml-6 pr-2 before:mt-2.5 basis-3/12'>
+              TAT has been trending down since Oct.
             </div>
-            <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-500 before:content-["⏰"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
-              Average TAT is higher than the industry average of 5 hours 
-              (<a className='text-blue-500' href='https://www.liveagent.com/research/customer-service-benchmarks/'>Live Agent 2023 Report</a>)
+            <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-500 before:content-["⏰"] before:absolute before:-ml-7 before:mt-2.5 basis-3/12'>
+              Average TAT is higher than 5 hr benchmark 
+              (<a className='text-blue-500' href='https://www.liveagent.com/research/customer-service-benchmarks/'>2023 Report</a>)
+            </div>
+            <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-700 before:content-["🧰"] before:absolute before:-ml-6 before:mt-2.5 basis-1/3'>
+              Quality & customs main areas to improve- make up majority of TAT most months
             </div>
           </div> 
         </div>

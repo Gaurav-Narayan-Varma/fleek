@@ -61,7 +61,6 @@ ChartJS.register(
     },
   };
 
-
 export default function ContactRateChart() {
   const myRef = useRef<Array<HTMLDivElement>>([])
 
@@ -104,11 +103,14 @@ export default function ContactRateChart() {
             <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-200 text-black text-center mt-2 font-semibold italic text-lg basis-1/6'>
             Key Takeaways
             </div>
-            <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-300 before:content-["📈"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
-            The contact rate has been trending upwards since August 2022
+            <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-300 before:content-["📈"] before:absolute before:-ml-7 before:mt-2.5 basis-3/12'>
+            The contact rate trending upwards since Aug.
             </div>
             <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-500 before:content-["🚫"] before:absolute before:-ml-7 before:mt-2.5 basis-1/3'>
-            Contact rate difficult to break down at supplier level, only ~6% of tickets list vendor info.
+            Difficult to break down by supplier ({`>`} 161 tickets list vendor) 
+            </div>
+            <div ref={addToRef} id='bullet' className='opacity-0 transition-all -translate-x-full duration-1000 delay-700 before:content-["🔨"] before:absolute before:-ml-7 before:mt-2.5 basis-5/12'>
+            Syed is biggest opportunity: represents over 1/3 of tickets listing vendor
             </div>
           </div> 
         </div>
