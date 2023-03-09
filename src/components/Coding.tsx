@@ -32,6 +32,7 @@ function Coding() {
     const [stage, setStage] = useState<string>('all')
     const [modal, setModal] = useState<boolean>(false)
     const [modalData, setModalData] = useState<ModalData | null>(null)
+    const [pwModal, setPwModal] = useState<boolean>(true)
 
     function handleStageClick(e: MouseEvent<HTMLDivElement>) {
       if (e.currentTarget.textContent != null) {
@@ -53,6 +54,10 @@ function Coding() {
   
     function closeModal() {
       setModal(false)
+    }
+
+    function closePwModal() {
+      setPwModal(false)
     }
   
     function stageCount(currStage: string) {
@@ -108,12 +113,8 @@ function Coding() {
         .catch(error => console.error(error));
     }, [])
   
-    console.log(trackers)
-    
     // Fetch data for each TrackerId and create parcel component
     useEffect(() => {
-      console.log('tracker number:', trackers)
-
       const batchSize = 8;
       let currentIndex = 0;
 
@@ -152,8 +153,25 @@ function Coding() {
       fetchTrackers();
     }, [trackers])
 
+    function pwEnter(e: any) {
+      if (e.currentTarget.value==='87sd!@43w8*(oihr') {
+        setPwModal(false)
+      }
+    }
+
     return(
         <section id='page-container' className='flex w-screen min-h-screen'>
+          {pwModal && 
+          <>
+            <div id='pw-overlay' className="fixed left-0 top-0 w-screen h-screen bg-black bg-opacity-60"/>
+            <div id='pw-modal' className='fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 bg-white'>
+              <div className="text-center mt-40">
+                <label className="text-black">Enter password: </label>
+                <input type="text" onKeyDown={pwEnter} className="bg-white border border-stone-300 text-black rounded-md"/>
+              </div>
+            </div>
+          </>
+          }
           <section id='parcel-dashboard' className='w-full bg-gray-50'>
             { modal && 
             <div id='modal-section'>
