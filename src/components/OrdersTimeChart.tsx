@@ -123,7 +123,7 @@ export default function OrdersTimeChart() {
 
   return (
     <div id='market-size-orders'>
-      <div id='chart' ref={addToRef} className='opacity-0 transition-all translate-x-full duration-1000 max-w-6xl mt-36 h-80 flex justify-center border border-stone-200 rounded-xl bg-white'>
+      <div id='chart' ref={addToRef} className='opacity-0 transition-all translate-x-full duration-1000 max-w-6xl h-80 flex justify-center border border-stone-200 rounded-xl bg-white'>
         <Line options={options} data={data} />
         <div id='analysis-section' className='text-black flex-1 rounded-xl flex flex-col justify-center px-8'>
           <div ref={addToRef} id='bullet' className='opacity-0 transition-all translate-x-full duration-1000 delay-200 text-black text-center mt-2 font-semibold italic text-lg basis-1/6'>

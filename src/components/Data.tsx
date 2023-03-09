@@ -10,50 +10,112 @@ import ContactRateChart from './ContactRateChart'
 import TouchesPerTicketChart from './TouchesPerTicket'
 import RevenueTimeChart from './RevenueTimeChart'
 
-function Data() {
-    return (
-      <section id='page-container' className='flex flex-col bg-gray-50 w-screen pt-12 px-6'>
-        <div className='h-screen'>
-          <h1 className='text-black font-bold mb-4'>Table of Contents</h1>
-          <ul className='pl-4 mb-6'>
-            <li className='mb-2  inline-block transition ease-in-out delay-50'>
-              <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#a1q1'>Understanding time to fulfill and deliver orders - Area 1: Question 1</a>
-            </li>
-            <li className='mb-2 inline-block mr-80 transition ease-in-out delay-50'>
-              <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#a1q2'>Understanding end to end delivery times for an order - Area 1: Question 2</a>
-            </li>
-            <li className='mb-2 inline-block transition ease-in-out delay-50'>
-              <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#turn-around-time'>Understanding turn around times - Area 2: Question 2</a>
-            </li>
-            <br></br>
-            <li className='mb-2 inline-block transition ease-in-out delay-50'>
-              <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#a1q1a'>Appendix</a>
-            </li>
-          </ul>
+export default function Data() {
+  return (
+    <section id='page-container' className='flex flex-col bg-gray-50 w-screen pt-12 px-6'>
+      <div id='table-contents' className='h-auto mb-96'>
+        <h1 className='text-black font-bold mb-4'>Table of Contents</h1>
+        <ul className='pl-4 mb-6'>
+          <li className='mb-2 text-black inline-block transition ease-in-out delay-50'>
+            🚚 Fullfilment
+          </li>
+          <br></br>
+          <li className='ml-6 mb-2 inline-block transition ease-in-out delay-50'>
+            <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#fulfill-delivery'>
+              Understanding time to fulfill and deliver orders
+            </a>
+          </li>
+          <br></br>
+          <li className='ml-6 mb-2 inline-block mr-80 transition ease-in-out delay-50'>
+            <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#stages'>
+              Understanding end to end delivery times
+            </a>
+          </li>
+          <br></br>
+          <li className='ml-6 mb-2 inline-block mr-80 transition ease-in-out delay-50'>
+            <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#market-size'>
+              Understanding market size
+            </a>
+          </li>
+          <br></br>
+          <li className='mb-2 text-black inline-block transition ease-in-out delay-50'>
+            💁 Customer Support
+          </li>
+          <br></br>
+          <li className='ml-6 mb-2 inline-block transition ease-in-out delay-50'>
+            <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#contact-rate'>
+              Understanding contact rate
+            </a>
+          </li>
+          <br></br>
+          <li className='ml-6 mb-2 inline-block transition ease-in-out delay-50'>
+            <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#turn-around-time'>
+              Understanding turn around time
+            </a>
+          </li>
+          <br></br>
+          <li className='ml-6 mb-2 inline-block transition ease-in-out delay-50'>
+            <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#touches-per-ticket'>
+              Understanding touches per ticket
+            </a>
+          </li>
+          <br></br>
+          <li className='mb-2 text-black inline-block transition ease-in-out delay-50'>
+            🗃️ Appendix
+          </li>
+          <br></br>
+          <li className='ml-6 mb-2 inline-block transition ease-in-out delay-50'>
+            <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#fulfill-dist'>
+              Appendix A: Time to Fulfillment Distribution
+            </a>
+          </li>
+          <br></br>
+          <li className='ml-6 mb-2 inline-block transition ease-in-out delay-50'>
+            <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#delivery-dist'>
+              Appendix B: Time to Deliver Distribution
+            </a>
+          </li>
+          <br></br>
+          <li className='ml-6 mb-2 inline-block transition ease-in-out delay-50'>
+            <a className='w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8' href='#orders-time-granular'>
+              Appendix C: Orders over Time Granular View
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div id='area 1'>
+        <div id='fulfill-delivery' className='mt-20 pt-1'>
+          <TTFByCountryChart />
+          <FTDByCountryChart />
         </div>
-        <div className='max-w-full'>
-          <div id='area 1'>
-            <div>
-              <TTFByCountryChart />
-              <FTDByCountryChart />
-            </div>
-            <StageStackChart />
-            <OrdersTimeChart />
-            <RevenueTimeChart />
-          </div>
-          <div id='area 2'>
-            <ContactRateChart />
-            <TATChart />
-            <TouchesPerTicketChart />
-          </div>
-          <div id='appendix'>
-            <TTFByHourChart />
-            <FTDChart />
-            <OrdersTimeChartGranular />
-          </div>
+        <div id='stages' className='pt-12 mb-12'>
+          <StageStackChart />
         </div>
-      </section>
-    )
+        <div id='market-size' className='pt-6'>
+          <OrdersTimeChart />
+          <RevenueTimeChart />
+        </div>
+      </div>
+      <div id='area 2'>
+        <div id='contact-rate' className='pt-28'>
+          <ContactRateChart />
+        </div>
+        <div id='turn-around-time' className='mt-56 pt-24'>
+          <TATChart />
+        </div>
+        <div id='touches-per-ticket' className='mt-56 pt-24'>
+          <TouchesPerTicketChart />
+        </div>
+      </div>
+      <div id='fulfill-dist' className='pt-4'>
+        <TTFByHourChart />
+      </div>
+      <div id='delivery-dist' className='pt-4'>
+        <FTDChart />
+      </div>
+      <div id='orders-time-granular' className='pt-4 mb-48'>
+        <OrdersTimeChartGranular />
+      </div>
+    </section>
+  )
 }
-
-export default Data

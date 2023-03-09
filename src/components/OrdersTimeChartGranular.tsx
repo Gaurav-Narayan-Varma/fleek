@@ -30,14 +30,23 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
+const options: any = {
   responsive: true,
   plugins: {
+    datalabels: {
+      display: true,
+      color: '#36454F',
+      align: 'top',
+      offset: 0,
+      font: {
+        size: 10
+      }
+  },
     legend: {
       display: false,
     },
     title: {
-      display: true,
+      display: false,
       text: 'Orders Over Time Granular View',
     },
   },
@@ -71,5 +80,12 @@ const data = {
 };
 
 export default function OrdersTimeChartGranular() {
-  return <Line options={options} data={data} />;
+  return (
+    <div>
+      <div className='text-stone-700 font-bold text-xl text-center mb-2'>
+        Orders Over Time Granular View
+      </div>
+      <Line options={options} data={data} />
+    </div>
+  );
 }

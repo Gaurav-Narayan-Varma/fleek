@@ -96,10 +96,17 @@ export default function TTFByHourChart() {
         datasets: option === 'buyer' ? ttfBuyerSets : ttfVendorSets
     };
 
-    const options = {
+    const options: any = {
         plugins: {
+            datalabels: {
+                display: false,
+                color: '#36454F',
+                font: {
+                  size: 10
+                }
+            },
             title: {
-                display: true,
+                display: false,
                 text: `Time to Fulfill by ${option === 'buyer' ? 'Buyer' : 'Vendor'} Country`,
             },
             legend: {
@@ -136,12 +143,14 @@ export default function TTFByHourChart() {
     };
 
     return (
-        <div id='a1q1a' className='mb-36'>
-            <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white'>
-                <option value='buyer'>Time to Fulfill by Buyer Country</option>
-                <option value='vendor'>Time to Fulfill by Vendor Country</option>
+        <div id='a1q1a' className='text-stone-700 font-bold text-xl text-center mb-2'>
+            Appendix A: Time to Fulfill Distribution by <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white'>
+                <option value='buyer'>Buyer Country</option>
+                <option value='vendor'>Vendor Country</option>
             </select>
-            <Bar options={options} data={data} />
+            <div className='w-5/6 m-auto'>
+                <Bar options={options} data={data} />
+            </div>
         </div>
     )
 }

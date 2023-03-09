@@ -134,8 +134,8 @@ ChartJS.register(
     }
 
     return (
-      <div id='turn-around-time'>
-        <div id='chart' ref={addToRef} className='opacity-0 transition-all -translate-x-full duration-1000 max-w-6xl mt-36 mb-52 flex flex-col justify-center border bg-white border-stone-200 rounded-xl'>
+      <div id='tat'>
+        <div id='chart' ref={addToRef} className='opacity-0 transition-all -translate-x-full duration-1000 max-w-6xl mb-52 flex flex-col justify-center border bg-white border-stone-200 rounded-xl'>
           <div className='mx-44'>
             <Bar options={options} data={data} />
           </div>

@@ -116,7 +116,6 @@ const options: any = {
   export default function TouchesPerTicketChart() {
     const myRef = useRef<Array<HTMLDivElement>>([])
 
-
     useEffect(()=>{
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -140,7 +139,7 @@ const options: any = {
 
     return (
         <div id='touches-per-ticket'>
-            <div id='chart' ref={addToRef} className='opacity-0 transition-all -translate-x-full duration-1000 max-w-6xl mt-36 mb-52 flex flex-col justify-center border bg-white border-stone-200 rounded-xl'>
+            <div id='chart' ref={addToRef} className='opacity-0 transition-all -translate-x-full duration-1000 max-w-6xl mb-52 flex flex-col justify-center border bg-white border-stone-200 rounded-xl'>
                 <div className="mx-44">
                     <Bar options={options} data={data} />
                 </div>

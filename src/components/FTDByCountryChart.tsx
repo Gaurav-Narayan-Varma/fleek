@@ -158,7 +158,7 @@ const options: any = {
               Quicker delivery times correlate with more orders across top four markets       
             </div>
             <div id='bullet' className='opacity-1 transition-all duration-1000 delay-500 before:content-["🐌"] before:text-2xl before:absolute before:-ml-7 before:-mt-1.5 basis-1/3'>
-              France faces longest average and median fulfillment times 
+              France faces slowest average and median delivery times 
             </div>
         </div> 
         :

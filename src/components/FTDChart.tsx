@@ -93,9 +93,16 @@ export default function FTDChart() {
 
     const options = {
         plugins: {
+            datalabels: {
+                display: false,
+                color: '#36454F',
+                font: {
+                  size: 10
+                }
+            },
             title: {
-                display: true,
-                text: `Time to Delivery by ${option==='buyer'?'Buyer':'Vendor'} Country`,
+                display: false,
+                text: `Time to Deliver by ${option==='buyer'?'Buyer':'Vendor'} Country`,
             },
             legend: {
                 display: false
@@ -117,7 +124,7 @@ export default function FTDChart() {
             stacked: true,
             title: {
                 display: true,
-                text: 'Time to Delivery (Hours)'
+                text: 'Hours to Deliver'
             }
             },
             y: {
@@ -131,12 +138,14 @@ export default function FTDChart() {
     };
 
     return (
-        <div className='mb-36'>
-            <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white'>
-                <option value='buyer'>Time to Delivery by Buyer Country</option>
-                <option value='vendor'>Time to Delivery by Vendor Country</option>
+        <div className='text-stone-700 font-bold text-xl text-center mb-2'>
+            Appendix B: Time to Deliver by <select onChange={(e) => setOption(e.target.value)} className='text-black bg-white'>
+                <option value='buyer'>Buyer Country</option>
+                <option value='vendor'>Vendor Country</option>
             </select>
-            <Bar options={options} data={data} />
+            <div className='w-5/6 m-auto'>
+                <Bar options={options} data={data} />
+            </div>
         </div>
     )
 }
