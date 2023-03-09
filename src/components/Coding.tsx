@@ -97,28 +97,42 @@ function Coding() {
   
     // Fetch data for each TrackerId and create parcel component
     useEffect(() => {
-      trackers.forEach(tracker => {
-        fetch(`https://api.ship24.com/public/v1/trackers/${tracker.trackerId}/results`, {
-          method: 'GET',
-          headers: {
-            'Authorization': 'Bearer apik_Ou1osZfT04pF7mpyMiWDyGdFowtpIP',
+      const batchSize = 9;
+      let currentIndex = 0;
+
+      function fetchTrackers() {
+        const trackersBatch = trackers.slice(currentIndex, currentIndex + batchSize);
+        const promises = trackersBatch.map(tracker => {
+          return fetch(`https://api.ship24.com/public/v1/trackers/${tracker.trackerId}/results`, {
+            method: 'GET',
+            headers: {
+              'Authorization': 'Bearer apik_Ou1osZfT04pF7mpyMiWDyGdFowtpIP',
+            }
+          }).then(response => response.json());
+        });
+
+        Promise.all(promises).then(results => {
+          results.forEach(data => {
+            setParcels(parcels => [
+              ...parcels, 
+              <tr id='parcel' className='cursor-pointer' onClick={() => handleParcelClick(data)} key={Math.random()}>
+                <td id='tracking-number' className='border'>{data.data.trackings[0].tracker.trackingNumber}</td>
+                <td id='status-milestone' className='border'>{data.data.trackings[0].shipment.statusMilestone}</td>
+                <td id='origin-country' className='border'>{data.data.trackings[0].shipment.originCountryCode}</td>
+                <td id='destination-country' className='border'>{data.data.trackings[0].shipment.destinationCountryCode}</td>
+                <td id='courier' className='border'>{data.data.trackings[0].events.length > 0 ? data.data.trackings[0].events[0].courierCode : 'n/a'}</td>
+              </tr>
+            ]);
+          });
+
+          currentIndex += batchSize;
+          if (currentIndex < trackers.length) {
+            setTimeout(fetchTrackers, 1000); // delay for 1 second before fetching the next batch
           }
-        })
-        .then(response => response.json())
-        .then(data => {
-          setParcels(parcels => [
-            ...parcels, 
-            <tr id='parcel' className='cursor-pointer' onClick={() => handleParcelClick(data)} key={Math.random()}>
-              <td id='tracking-number' className='border'>{data.data.trackings[0].tracker.trackingNumber}</td>
-              <td id='status-milestone' className='border'>{data.data.trackings[0].shipment.statusMilestone}</td>
-              <td id='origin-country' className='border'>{data.data.trackings[0].shipment.originCountryCode}</td>
-              <td id='destination-country' className='border'>{data.data.trackings[0].shipment.destinationCountryCode}</td>
-              <td id='courier' className='border'>{data.data.trackings[0].events.length > 0 ? data.data.trackings[0].events[0].courierCode : 'n/a'}</td>
-            </tr>
-          ])
-        })
-        .catch(error => console.error(error))
-      })
+        }).catch(error => console.error(error));
+      }
+
+      fetchTrackers();
     }, [trackers])
 
     return(
