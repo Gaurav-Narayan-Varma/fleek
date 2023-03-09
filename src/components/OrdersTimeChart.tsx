@@ -89,8 +89,6 @@ const sets = Object.keys(myOrdersTimeGroupedData).map((key) => {
     })
 });
 
-console.log(sets)
-
 const data: any = {
   labels,
   datasets: sets,

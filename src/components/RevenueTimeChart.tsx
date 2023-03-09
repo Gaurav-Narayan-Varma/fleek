@@ -151,8 +151,6 @@ const sets = [{
 
 ]
 
-console.log(sets)
-
 const data: any = {
   labels,
   datasets: sets,
