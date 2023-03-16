@@ -341,7 +341,7 @@ function Coding() {
             onClick={loadThreeMore}
             className="text-white border border-white px-2 py-1 rounded-md bg-cyan-500 cursor-pointer"
           >
-            Loading
+            Load 3 More
           </span>
         </div>
       </section>
