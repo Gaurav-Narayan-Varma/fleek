@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { MouseEvent } from "react";
 import { DetailedHTMLProps, TdHTMLAttributes } from "react";
-import ModalData from "../@types/ModalData";
+import ModalData from "../../@types/ModalData";
 
 declare global {
   namespace JSX {

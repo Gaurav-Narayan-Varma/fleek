@@ -1,8 +1,8 @@
 import { Routes, Route, Link } from "react-router-dom";
-import ParcelDashboard from "./components/ParcelDashboard";
-import ChartsAnalysis from "./components/ChartsAnalysis";
 import fleekLogo from "./assets/black_logo_transparent_background.avif";
 import { useLocation } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import Charts from "./pages/Charts";
 
 function App() {
   const location = useLocation();
@@ -30,8 +30,8 @@ function App() {
           </ul>
         </section>
         <Routes>
-          <Route path="/" element={<ParcelDashboard />} />
-          <Route path="/data" element={<ChartsAnalysis />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/data" element={<Charts />} />
         </Routes>
       </div>
     </div>
