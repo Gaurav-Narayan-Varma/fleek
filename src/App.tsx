@@ -19,7 +19,7 @@ function App() {
               <Link to='/'>📦 Parcel Dashboard</Link>
             </li>
             <li className={`${location.pathname === '/data' && 'font-bold'}`}>
-            <Link to='/data'>📈 Charts & Analysis</Link>
+              <Link to='/data'>📈 Charts & Analysis</Link>
             </li>
           </ul>
         </section>

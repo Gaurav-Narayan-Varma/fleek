@@ -32,7 +32,7 @@ function Coding() {
     const [stage, setStage] = useState<string>('all')
     const [modal, setModal] = useState<boolean>(false)
     const [modalData, setModalData] = useState<ModalData | null>(null)
-    const [pwModal, setPwModal] = useState<boolean>(true)
+    const [pwModal, setPwModal] = useState<boolean>(false)
 
     function handleStageClick(e: MouseEvent<HTMLDivElement>) {
       if (e.currentTarget.textContent != null) {
