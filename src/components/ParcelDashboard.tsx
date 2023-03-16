@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { MouseEvent } from "react";
 import { DetailedHTMLProps, TdHTMLAttributes } from "react";
-import ModalData from "../types/ModalData";
+import ModalData from "../@types/ModalData";
 
 declare global {
   namespace JSX {
@@ -39,7 +39,7 @@ const stageMap: { [key: string]: string } = {
   Exception: "exception",
 };
 
-function Coding() {
+export default function ParcelDashboard() {
   const [trackers, setTrackers] = useState<
     { trackerId: string; trackingNumber: string }[]
   >([]);
@@ -146,15 +146,15 @@ function Coding() {
     const batchSize = 3;
     let currentIndex = nextBatch - 3;
 
-    function fetchTrackers() {
-      // creating a new list of trackers
-      const trackersBatch = trackers.slice(
-        currentIndex,
-        currentIndex + batchSize
-      );
+    // creating a new list of trackers
+    const trackersBatch = trackers.slice(
+      currentIndex,
+      currentIndex + batchSize
+    );
 
+    function fetchTrackers() {
       // creating list of promises, each one representing a tracker
-      const promises = trackersBatch.map((tracker) => {
+      const trackerPromiseList = trackersBatch.map((tracker) => {
         return fetch(
           `https://api.ship24.com/public/v1/trackers/${tracker.trackerId}/results`,
           {
@@ -167,7 +167,7 @@ function Coding() {
       });
 
       // iterating through the list of trackers
-      Promise.all(promises)
+      Promise.all(trackerPromiseList)
         .then((results) => {
           results.forEach((data) => {
             setParcels((parcels) => [
@@ -339,7 +339,7 @@ function Coding() {
         <div className="mt-2 m-auto flex justify-center">
           <span
             onClick={loadThreeMore}
-            className="text-white border border-white px-2 py-1 rounded-md bg-cyan-500 cursor-pointer"
+            className="text-black border border-black px-2 py-1 rounded-md bg-white cursor-pointer"
           >
             Load 3 More
           </span>
@@ -348,5 +348,3 @@ function Coding() {
     </section>
   );
 }
-
-export default Coding;
