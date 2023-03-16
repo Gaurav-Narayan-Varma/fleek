@@ -299,7 +299,7 @@ function Coding() {
             </div>
           </div>
         )}
-        {/* <section
+        <section
           id="stage-nav-bar"
           className="bg-yellow-200 text-black flex justify-around p-15 font-medium h-8 items-center rounded-lg mt-2 mx-2 bg-gradient-to-r from-cyan-500 to-blue-500"
         >
@@ -313,7 +313,7 @@ function Coding() {
               {getStageHeaderText(currentStage)}
             </div>
           ))}
-        </section> */}
+        </section>
         <table id="parcel-stack" className="w-11/12 mx-auto mt-5">
           <thead id="parcel-stack-header" className="text-black">
             <tr>
