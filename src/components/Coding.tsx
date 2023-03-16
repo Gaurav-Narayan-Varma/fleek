@@ -147,11 +147,13 @@ function Coding() {
     let currentIndex = nextBatch - 3;
 
     function fetchTrackers() {
-      // slicing the trackers
+      // creating a new list of trackers
       const trackersBatch = trackers.slice(
         currentIndex,
         currentIndex + batchSize
       );
+
+      // creating list of promises, each one representing a tracker
       const promises = trackersBatch.map((tracker) => {
         return fetch(
           `https://api.ship24.com/public/v1/trackers/${tracker.trackerId}/results`,
@@ -164,6 +166,7 @@ function Coding() {
         ).then((response) => response.json());
       });
 
+      // iterating through the list of trackers
       Promise.all(promises)
         .then((results) => {
           results.forEach((data) => {
@@ -333,12 +336,14 @@ function Coding() {
                 })}
           </tbody>
         </table>
-        <span
-          onClick={loadThreeMore}
-          className="text-black border border-black"
-        >
-          Loading
-        </span>
+        <div className="mt-2 m-auto flex justify-center">
+          <span
+            onClick={loadThreeMore}
+            className="text-white border border-white px-2 py-1 rounded-md bg-cyan-500 cursor-pointer"
+          >
+            Loading
+          </span>
+        </div>
       </section>
     </section>
   );
