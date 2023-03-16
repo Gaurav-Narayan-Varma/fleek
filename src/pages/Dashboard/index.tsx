@@ -218,7 +218,7 @@ export default function ParcelDashboard() {
 
   return (
     <section id="page-container" className="flex w-screen min-h-screen">
-      {/* {pwModal && (
+      {pwModal && (
         <>
           <div
             id="pw-overlay"
@@ -238,7 +238,7 @@ export default function ParcelDashboard() {
             </div>
           </div>
         </>
-      )} */}
+      )}
       <section id="parcel-dashboard" className="w-full bg-gray-50">
         {modal && (
           <div id="modal-section">
