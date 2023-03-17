@@ -1,34 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { MouseEvent } from "react";
-import { DetailedHTMLProps, TdHTMLAttributes } from "react";
 import ModalData from "../../@types/ModalData";
 import Filter from "./Filter";
 import Login from "./Login";
 import Updates from "./Updates";
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      td: DetailedHTMLProps<
-        TdHTMLAttributes<HTMLTableDataCellElement>,
-        HTMLTableDataCellElement
-      >;
-    }
-  }
-}
-
-const stages = [
-  "all",
-  "pending",
-  "info_received",
-  "in_transit",
-  "out_for_delivery",
-  "failed_attempt",
-  "available_for_pickup",
-  "delivered",
-  "exception",
-];
 
 const stageMap: { [key: string]: string } = {
   All: "all",
@@ -50,7 +26,7 @@ export default function ParcelDashboard() {
   const [stage, setStage] = useState<string>("all");
   const [isParcelClicked, setIsParcelClicked] = useState<boolean>(false);
   const [modalData, setModalData] = useState<ModalData | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
   const [nextBatch, setNextBatch] = useState<number>(3);
 
   function handleStageClick(e: MouseEvent<HTMLDivElement>) {
@@ -71,12 +47,8 @@ export default function ParcelDashboard() {
     setIsParcelClicked(true);
   }
 
-  function closeModal() {
+  function closeUpdates() {
     setIsParcelClicked(false);
-  }
-
-  function closePwModal() {
-    setIsLoggedIn(false);
   }
 
   function stageCount(currStage: string) {
@@ -215,7 +187,7 @@ export default function ParcelDashboard() {
 
   function checkPassword(e: any) {
     if (e.currentTarget.value === "87sd!@43w8*(oihr") {
-      setIsLoggedIn(false);
+      setIsLoggedIn(true);
     }
   }
 
@@ -224,12 +196,11 @@ export default function ParcelDashboard() {
       id="parcel-dashboard"
       className="flex flex-col w-screen min-h-screen bg-gray-50"
     >
-      {isLoggedIn && <Login checkPassword={checkPassword} />}
+      {!isLoggedIn && <Login checkPassword={checkPassword} />}
       {isParcelClicked && (
-        <Updates closeModal={closeModal} modalData={modalData} />
+        <Updates closeUpdates={closeUpdates} modalData={modalData} />
       )}
       <Filter
-        stages={stages}
         getClassName={getClassName}
         getStageHeaderText={getStageHeaderText}
         handleStageClick={handleStageClick}

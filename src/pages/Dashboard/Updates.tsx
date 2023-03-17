@@ -3,7 +3,7 @@ export default function Updates(props: any) {
     <div id="modal-section">
       <div
         id="overlay"
-        onClick={props.closeModal}
+        onClick={props.closeUpdates}
         className="fixed left-0 top-0 w-screen h-screen bg-black bg-opacity-60"
       />
       <div
@@ -49,7 +49,7 @@ export default function Updates(props: any) {
         <div className="bg-white h-7 relative border">
           <div
             id="close-btn"
-            onClick={props.closeModal}
+            onClick={props.closeUpdates}
             className="absolute right-2 rounded-lg cursor-pointer bg-neutral-300 inline-block text-red-600"
           >
             ❌ Close
