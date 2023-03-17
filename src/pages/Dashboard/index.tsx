@@ -19,9 +19,6 @@ const stageMap: { [key: string]: string } = {
 };
 
 export default function ParcelDashboard() {
-  const [trackers, setTrackers] = useState<
-    { trackerId: string; trackingNumber: string }[]
-  >([]);
   const [parcels, setParcels] = useState<React.ReactNode[]>([]);
   const [stage, setStage] = useState<string>("all");
   const [isParcelClicked, setIsParcelClicked] = useState<boolean>(false);
@@ -85,9 +82,9 @@ export default function ParcelDashboard() {
     setBatchSize((old) => old + 3);
   }
 
-  // Fetching all trackers
   useEffect(() => {
     let myPromise: any;
+    const latestTrackers: any[] = [];
 
     for (let i = 1; i < 2; i++) {
       const promise = fetch(
@@ -108,62 +105,55 @@ export default function ParcelDashboard() {
 
     myPromise
       .then((trackersArrays: any) => {
-        // console.log(trackersArrays);
-        setTrackers([]);
-        const trackers = trackersArrays.flat();
-        setTrackers(trackers);
+        // for the last 3 trackers render them as rows in the table
+        const latestTrackers = trackersArrays
+          .flat()
+          .slice(batchSize - 3, batchSize);
+
+        latestTrackers.forEach((tracker: any) => {
+          fetch(
+            `https://api.ship24.com/public/v1/trackers/${tracker.trackerId}/results`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: "Bearer apik_Ou1osZfT04pF7mpyMiWDyGdFowtpIP",
+              },
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              setParcels((parcels) => [
+                ...parcels,
+                <tr
+                  id="parcel"
+                  className="cursor-pointer"
+                  onClick={() => handleParcelClick(data)}
+                  key={Math.random()}
+                >
+                  <td id="tracking-number" className="border">
+                    {data.data.trackings[0].tracker.trackingNumber}
+                  </td>
+                  <td id="status-milestone" className="border">
+                    {data.data.trackings[0].shipment.statusMilestone}
+                  </td>
+                  <td id="origin-country" className="border">
+                    {data.data.trackings[0].shipment.originCountryCode}
+                  </td>
+                  <td id="destination-country" className="border">
+                    {data.data.trackings[0].shipment.destinationCountryCode}
+                  </td>
+                  <td id="courier" className="border">
+                    {data.data.trackings[0].events.length > 0
+                      ? data.data.trackings[0].events[0].courierCode
+                      : "n/a"}
+                  </td>
+                </tr>,
+              ]);
+            });
+        });
       })
       .catch((error: any) => console.error(error));
   }, [batchSize]);
-
-  // Fetch data for each TrackerId and create parcel component
-  useEffect(() => {
-    // we only want to render the last 3 trackers
-    const latestTrackers = trackers.slice(batchSize - 3, batchSize);
-
-    // for the last 3 trackers render them as rows in the table
-    latestTrackers.forEach((tracker) => {
-      fetch(
-        `https://api.ship24.com/public/v1/trackers/${tracker.trackerId}/results`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: "Bearer apik_Ou1osZfT04pF7mpyMiWDyGdFowtpIP",
-          },
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          setParcels((parcels) => [
-            ...parcels,
-            <tr
-              id="parcel"
-              className="cursor-pointer"
-              onClick={() => handleParcelClick(data)}
-              key={Math.random()}
-            >
-              <td id="tracking-number" className="border">
-                {data.data.trackings[0].tracker.trackingNumber}
-              </td>
-              <td id="status-milestone" className="border">
-                {data.data.trackings[0].shipment.statusMilestone}
-              </td>
-              <td id="origin-country" className="border">
-                {data.data.trackings[0].shipment.originCountryCode}
-              </td>
-              <td id="destination-country" className="border">
-                {data.data.trackings[0].shipment.destinationCountryCode}
-              </td>
-              <td id="courier" className="border">
-                {data.data.trackings[0].events.length > 0
-                  ? data.data.trackings[0].events[0].courierCode
-                  : "n/a"}
-              </td>
-            </tr>,
-          ]);
-        });
-    });
-  }, [trackers]);
 
   function checkPassword(e: any) {
     if (e.currentTarget.value === "87sd!@43w8*(oihr") {
