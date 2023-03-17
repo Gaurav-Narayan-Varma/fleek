@@ -27,7 +27,7 @@ export default function ParcelDashboard() {
   const [isParcelClicked, setIsParcelClicked] = useState<boolean>(false);
   const [modalData, setModalData] = useState<ModalData | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
-  const [nextBatch, setNextBatch] = useState<number>(3);
+  const [batchSize, setBatchSize] = useState<number>(3);
 
   function handleStageClick(e: MouseEvent<HTMLDivElement>) {
     if (e.currentTarget.textContent != null) {
@@ -82,7 +82,7 @@ export default function ParcelDashboard() {
   }
 
   function loadThreeMore() {
-    setNextBatch((old) => old + 3);
+    setBatchSize((old) => old + 3);
   }
 
   // Fetching all trackers
@@ -91,7 +91,7 @@ export default function ParcelDashboard() {
 
     for (let i = 1; i < 2; i++) {
       const promise = fetch(
-        `https://api.ship24.com/public/v1/trackers?page=${i}&limit=${nextBatch}`,
+        `https://api.ship24.com/public/v1/trackers?page=${i}&limit=${batchSize}`,
         {
           method: "GET",
           headers: {
@@ -114,22 +114,16 @@ export default function ParcelDashboard() {
         setTrackers(trackers);
       })
       .catch((error: any) => console.error(error));
-  }, [nextBatch]);
+  }, [batchSize]);
 
   // Fetch data for each TrackerId and create parcel component
   useEffect(() => {
-    const batchSize = 3;
-    let currentIndex = nextBatch - 3;
-
-    // creating a new list of trackers
-    const trackersBatch = trackers.slice(
-      currentIndex,
-      currentIndex + batchSize
-    );
+    // we only want to render the last 3 trackers
+    const latestTrackers = trackers.slice(batchSize - 3, batchSize);
 
     function fetchTrackers() {
       // creating list of promises, each one representing a tracker
-      const trackerPromiseList = trackersBatch.map((tracker) => {
+      const trackerPromiseList = latestTrackers.map((tracker) => {
         return fetch(
           `https://api.ship24.com/public/v1/trackers/${tracker.trackerId}/results`,
           {
@@ -141,7 +135,7 @@ export default function ParcelDashboard() {
         ).then((response) => response.json());
       });
 
-      // iterating through the list of trackers
+      // resolve each promise and add new parcel rows
       Promise.all(trackerPromiseList)
         .then((results) => {
           results.forEach((data) => {
@@ -173,11 +167,6 @@ export default function ParcelDashboard() {
               </tr>,
             ]);
           });
-
-          currentIndex += batchSize;
-          if (currentIndex < trackers.length) {
-            setTimeout(fetchTrackers, 1000); // delay for 1 second before fetching the next batch
-          }
         })
         .catch((error) => console.error(error));
     }
