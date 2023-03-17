@@ -121,57 +121,48 @@ export default function ParcelDashboard() {
     // we only want to render the last 3 trackers
     const latestTrackers = trackers.slice(batchSize - 3, batchSize);
 
-    function fetchTrackers() {
-      // creating list of promises, each one representing a tracker
-      const trackerPromiseList = latestTrackers.map((tracker) => {
-        return fetch(
-          `https://api.ship24.com/public/v1/trackers/${tracker.trackerId}/results`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: "Bearer apik_Ou1osZfT04pF7mpyMiWDyGdFowtpIP",
-            },
-          }
-        ).then((response) => response.json());
-      });
-
-      // resolve each promise and add new parcel rows
-      Promise.all(trackerPromiseList)
-        .then((results) => {
-          results.forEach((data) => {
-            setParcels((parcels) => [
-              ...parcels,
-              <tr
-                id="parcel"
-                className="cursor-pointer"
-                onClick={() => handleParcelClick(data)}
-                key={Math.random()}
-              >
-                <td id="tracking-number" className="border">
-                  {data.data.trackings[0].tracker.trackingNumber}
-                </td>
-                <td id="status-milestone" className="border">
-                  {data.data.trackings[0].shipment.statusMilestone}
-                </td>
-                <td id="origin-country" className="border">
-                  {data.data.trackings[0].shipment.originCountryCode}
-                </td>
-                <td id="destination-country" className="border">
-                  {data.data.trackings[0].shipment.destinationCountryCode}
-                </td>
-                <td id="courier" className="border">
-                  {data.data.trackings[0].events.length > 0
-                    ? data.data.trackings[0].events[0].courierCode
-                    : "n/a"}
-                </td>
-              </tr>,
-            ]);
-          });
-        })
-        .catch((error) => console.error(error));
-    }
-
-    fetchTrackers();
+    // for the last 3 trackers render them as rows in the table
+    latestTrackers.forEach((tracker) => {
+      fetch(
+        `https://api.ship24.com/public/v1/trackers/${tracker.trackerId}/results`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer apik_Ou1osZfT04pF7mpyMiWDyGdFowtpIP",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setParcels((parcels) => [
+            ...parcels,
+            <tr
+              id="parcel"
+              className="cursor-pointer"
+              onClick={() => handleParcelClick(data)}
+              key={Math.random()}
+            >
+              <td id="tracking-number" className="border">
+                {data.data.trackings[0].tracker.trackingNumber}
+              </td>
+              <td id="status-milestone" className="border">
+                {data.data.trackings[0].shipment.statusMilestone}
+              </td>
+              <td id="origin-country" className="border">
+                {data.data.trackings[0].shipment.originCountryCode}
+              </td>
+              <td id="destination-country" className="border">
+                {data.data.trackings[0].shipment.destinationCountryCode}
+              </td>
+              <td id="courier" className="border">
+                {data.data.trackings[0].events.length > 0
+                  ? data.data.trackings[0].events[0].courierCode
+                  : "n/a"}
+              </td>
+            </tr>,
+          ]);
+        });
+    });
   }, [trackers]);
 
   function checkPassword(e: any) {
