@@ -5,6 +5,7 @@ import ModalData from "../../@types/ModalData";
 import Filter from "./Filter";
 import Login from "./Login";
 import Updates from "./Updates";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 const stageMap: { [key: string]: string } = {
   All: "all",
@@ -25,6 +26,7 @@ export default function ParcelDashboard() {
   const [modalData, setModalData] = useState<ModalData | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
   const [batchSize, setBatchSize] = useState<number>(3);
+  const [searchText, setSearchText] = useState<string>("");
 
   function handleStageClick(e: MouseEvent<HTMLDivElement>) {
     if (e.currentTarget.textContent != null) {
@@ -85,10 +87,8 @@ export default function ParcelDashboard() {
   useEffect(() => {
     let myPromise: any;
 
-    
     for (let i = 1; i < Math.ceil(batchSize / 40) + 1; i++) {
-      
-      let limit = batchSize - ((i-1)*40);
+      let limit = batchSize - (i - 1) * 40;
       if (limit > 40) {
         limit = 40;
       }
@@ -104,7 +104,6 @@ export default function ParcelDashboard() {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log(data.data.trackers.length);
           return data.data.trackers;
         })
         .catch((error) => console.error(error));
@@ -139,19 +138,22 @@ export default function ParcelDashboard() {
                   onClick={() => handleParcelClick(data)}
                   key={Math.random()}
                 >
-                  <td id="tracking-number" className="border">
+                  <td id="tracking-number" className="border border-stone-300">
                     {data.data.trackings[0].tracker.trackingNumber}
                   </td>
-                  <td id="status-milestone" className="border">
+                  <td id="status-milestone" className="border border-stone-300">
                     {data.data.trackings[0].shipment.statusMilestone}
                   </td>
-                  <td id="origin-country" className="border">
+                  <td id="origin-country" className="border border-stone-300">
                     {data.data.trackings[0].shipment.originCountryCode}
                   </td>
-                  <td id="destination-country" className="border">
+                  <td
+                    id="destination-country"
+                    className="border border-stone-300"
+                  >
                     {data.data.trackings[0].shipment.destinationCountryCode}
                   </td>
-                  <td id="courier" className="border">
+                  <td id="courier" className="border border-stone-300">
                     {data.data.trackings[0].events.length > 0
                       ? data.data.trackings[0].events[0].courierCode
                       : "n/a"}
@@ -170,6 +172,10 @@ export default function ParcelDashboard() {
     }
   }
 
+  function updateParcels(e: any) {
+    setSearchText(e.target.value);
+  }
+
   return (
     <section
       id="parcel-dashboard"
@@ -184,23 +190,48 @@ export default function ParcelDashboard() {
         getStageHeaderText={getStageHeaderText}
         handleStageClick={handleStageClick}
       />
+      <label
+        onChange={updateParcels}
+        htmlFor="text"
+        className="relative text-black bg-white block mt-4 w-4/5 mx-auto"
+      >
+        <MagnifyingGlassIcon className="text-stone-400 pointer-events-none w-4 h-4 absolute top-1/2 transform -translate-y-1/2 right-2" />
+        <input
+          type="text"
+          placeholder="Search by Tracking Number"
+          className="border border-stone-400 rounded-md form-input w-full text-black bg-white"
+        ></input>
+      </label>
       <table id="parcel-stack" className="w-11/12 mx-auto mt-5">
-        <thead id="parcel-stack-header" className="text-black">
+        <thead id="parcel-stack-header" className="text-black border-stone-300">
           <tr>
-            <th className="border">Tracking Number</th>
-            <th className="border">Status</th>
-            <th className="border">Origin</th>
-            <th className="border">Destination</th>
-            <th className="border">Courier</th>
+            <th className="border border-stone-300">Tracking Number</th>
+            <th className="border border-stone-300">Status</th>
+            <th className="border border-stone-300">Origin</th>
+            <th className="border border-stone-300">Destination</th>
+            <th className="border border-stone-300">Courier</th>
           </tr>
         </thead>
         <tbody className="text-black">
           {stage === "all"
-            ? parcels
+            ? parcels.filter((parcel) => {
+                if (parcel != null) {
+                  if (React.isValidElement(parcel)) {
+                    return parcel.props.children[0].props.children.includes(
+                      searchText
+                    );
+                  }
+                }
+              })
             : parcels.filter((parcel) => {
                 if (parcel != null) {
                   if (React.isValidElement(parcel)) {
-                    return parcel.props.children[1].props.children === stage;
+                    return (
+                      parcel.props.children[1].props.children === stage &&
+                      parcel.props.children[0].props.children.includes(
+                        searchText
+                      )
+                    );
                   }
                 }
               })}

@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.16",
     "@types/recharts": "^1.8.24",
     "@types/styled-components": "^5.1.26",
     "chart.js": "^4.2.1",
