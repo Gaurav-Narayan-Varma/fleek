@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { MouseEvent } from "react";
 import { DetailedHTMLProps, TdHTMLAttributes } from "react";
 import ModalData from "../../@types/ModalData";
+import Filter from "./Filter";
 import Login from "./Login";
 import Updates from "./Updates";
 
@@ -227,21 +228,12 @@ export default function ParcelDashboard() {
       {isParcelClicked && (
         <Updates closeModal={closeModal} modalData={modalData} />
       )}
-      <section
-        id="stage-nav-bar"
-        className="bg-yellow-200 text-black flex justify-around p-15 font-medium h-8 items-center rounded-lg mt-2 mx-2 bg-gradient-to-r from-cyan-500 to-blue-500"
-      >
-        {stages.map((currentStage) => (
-          <div
-            id="stage-header"
-            className={getClassName(currentStage)}
-            onClick={handleStageClick}
-            key={currentStage}
-          >
-            {getStageHeaderText(currentStage)}
-          </div>
-        ))}
-      </section>
+      <Filter
+        stages={stages}
+        getClassName={getClassName}
+        getStageHeaderText={getStageHeaderText}
+        handleStageClick={handleStageClick}
+      />
       <table id="parcel-stack" className="w-11/12 mx-auto mt-5">
         <thead id="parcel-stack-header" className="text-black">
           <tr>
