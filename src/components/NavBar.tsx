@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import fleekLogo from "../assets/black_logo_transparent_background.avif";
 
 export default function NavBar() {
+  const location = useLocation();
+
   return (
     <section
       id="nav-bar"

@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Charts from "./pages/Charts";
 import NavBar from "./components/NavBar";
