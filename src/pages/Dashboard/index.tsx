@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { MouseEvent } from "react";
 import { DetailedHTMLProps, TdHTMLAttributes } from "react";
 import ModalData from "../../@types/ModalData";
+import Login from "./Login";
+import Updates from "./Updates";
 
 declare global {
   namespace JSX {
@@ -45,9 +47,9 @@ export default function ParcelDashboard() {
   >([]);
   const [parcels, setParcels] = useState<React.ReactNode[]>([]);
   const [stage, setStage] = useState<string>("all");
-  const [modal, setModal] = useState<boolean>(false);
+  const [isParcelClicked, setIsParcelClicked] = useState<boolean>(false);
   const [modalData, setModalData] = useState<ModalData | null>(null);
-  const [pwModal, setPwModal] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [nextBatch, setNextBatch] = useState<number>(3);
 
   function handleStageClick(e: MouseEvent<HTMLDivElement>) {
@@ -65,15 +67,15 @@ export default function ParcelDashboard() {
 
   function handleParcelClick(data: ModalData) {
     setModalData(data);
-    setModal(true);
+    setIsParcelClicked(true);
   }
 
   function closeModal() {
-    setModal(false);
+    setIsParcelClicked(false);
   }
 
   function closePwModal() {
-    setPwModal(false);
+    setIsLoggedIn(false);
   }
 
   function stageCount(currStage: string) {
@@ -210,141 +212,66 @@ export default function ParcelDashboard() {
     fetchTrackers();
   }, [trackers]);
 
-  function pwEnter(e: any) {
+  function checkPassword(e: any) {
     if (e.currentTarget.value === "87sd!@43w8*(oihr") {
-      setPwModal(false);
+      setIsLoggedIn(false);
     }
   }
 
   return (
-    <section id="page-container" className="flex w-screen min-h-screen">
-      {pwModal && (
-        <>
-          <div
-            id="pw-overlay"
-            className="fixed left-0 top-0 w-screen h-screen bg-black bg-opacity-60"
-          />
-          <div
-            id="pw-modal"
-            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 bg-white"
-          >
-            <div className="text-center mt-40">
-              <label className="text-black">Enter password: </label>
-              <input
-                type="text"
-                onKeyDown={pwEnter}
-                className="bg-white border border-stone-300 text-black rounded-md"
-              />
-            </div>
-          </div>
-        </>
+    <section
+      id="parcel-dashboard"
+      className="flex flex-col w-screen min-h-screen bg-gray-50"
+    >
+      {isLoggedIn && <Login checkPassword={checkPassword} />}
+      {isParcelClicked && (
+        <Updates closeModal={closeModal} modalData={modalData} />
       )}
-      <section id="parcel-dashboard" className="w-full bg-gray-50">
-        {modal && (
-          <div id="modal-section">
-            <div
-              id="overlay"
-              onClick={closeModal}
-              className="fixed left-0 top-0 w-screen h-screen bg-black bg-opacity-60"
-            />
-            <div
-              id="modal"
-              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 bg-white"
-            >
-              <div id="updates" className="overflow-auto w-full h-full">
-                {modalData?.data?.trackings[0]?.events?.length! > 0 ? (
-                  <table>
-                    <thead>
-                      <tr className="text-black">
-                        <th className="border border-black">Date</th>
-                        <th className="border border-black">Location</th>
-                        <th className="border border-black">Status</th>
-                        <th className="border border-black">Courier</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {modalData?.data?.trackings[0]?.events.map((update) => {
-                        return (
-                          <tr className="text-black">
-                            <td className="border border-black">
-                              {update.datetime}
-                            </td>
-                            <td className="border border-black">
-                              {update.location}
-                            </td>
-                            <td className="border border-black">
-                              {update.status}
-                            </td>
-                            <td className="border border-black">
-                              {update.courierCode}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                ) : (
-                  <div className="text-black">No updates found</div>
-                )}
-              </div>
-              <div className="bg-white h-7 relative border">
-                <div
-                  id="close-btn"
-                  onClick={closeModal}
-                  className="absolute right-2 rounded-lg cursor-pointer bg-neutral-300 inline-block text-red-600"
-                >
-                  ❌ Close
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        <section
-          id="stage-nav-bar"
-          className="bg-yellow-200 text-black flex justify-around p-15 font-medium h-8 items-center rounded-lg mt-2 mx-2 bg-gradient-to-r from-cyan-500 to-blue-500"
-        >
-          {stages.map((currentStage) => (
-            <div
-              id="stage-header"
-              className={getClassName(currentStage)}
-              onClick={handleStageClick}
-              key={currentStage}
-            >
-              {getStageHeaderText(currentStage)}
-            </div>
-          ))}
-        </section>
-        <table id="parcel-stack" className="w-11/12 mx-auto mt-5">
-          <thead id="parcel-stack-header" className="text-black">
-            <tr>
-              <th className="border">Tracking Number</th>
-              <th className="border">Status</th>
-              <th className="border">Origin</th>
-              <th className="border">Destination</th>
-              <th className="border">Courier</th>
-            </tr>
-          </thead>
-          <tbody className="text-black">
-            {stage === "all"
-              ? parcels
-              : parcels.filter((parcel) => {
-                  if (parcel != null) {
-                    if (React.isValidElement(parcel)) {
-                      return parcel.props.children[1].props.children === stage;
-                    }
-                  }
-                })}
-          </tbody>
-        </table>
-        <div className="mt-2 m-auto flex justify-center">
-          <span
-            onClick={loadThreeMore}
-            className="text-black border border-black px-2 py-1 rounded-md bg-white cursor-pointer"
+      <section
+        id="stage-nav-bar"
+        className="bg-yellow-200 text-black flex justify-around p-15 font-medium h-8 items-center rounded-lg mt-2 mx-2 bg-gradient-to-r from-cyan-500 to-blue-500"
+      >
+        {stages.map((currentStage) => (
+          <div
+            id="stage-header"
+            className={getClassName(currentStage)}
+            onClick={handleStageClick}
+            key={currentStage}
           >
-            Load 3 More
-          </span>
-        </div>
+            {getStageHeaderText(currentStage)}
+          </div>
+        ))}
       </section>
+      <table id="parcel-stack" className="w-11/12 mx-auto mt-5">
+        <thead id="parcel-stack-header" className="text-black">
+          <tr>
+            <th className="border">Tracking Number</th>
+            <th className="border">Status</th>
+            <th className="border">Origin</th>
+            <th className="border">Destination</th>
+            <th className="border">Courier</th>
+          </tr>
+        </thead>
+        <tbody className="text-black">
+          {stage === "all"
+            ? parcels
+            : parcels.filter((parcel) => {
+                if (parcel != null) {
+                  if (React.isValidElement(parcel)) {
+                    return parcel.props.children[1].props.children === stage;
+                  }
+                }
+              })}
+        </tbody>
+      </table>
+      <div className="mt-2 m-auto flex justify-center">
+        <span
+          onClick={loadThreeMore}
+          className="text-black border border-black px-2 py-1 rounded-md bg-white cursor-pointer"
+        >
+          Load 3 More
+        </span>
+      </div>
     </section>
   );
 }
