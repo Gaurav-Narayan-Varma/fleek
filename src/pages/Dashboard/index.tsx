@@ -84,11 +84,17 @@ export default function ParcelDashboard() {
 
   useEffect(() => {
     let myPromise: any;
-    const latestTrackers: any[] = [];
 
-    for (let i = 1; i < 2; i++) {
+    
+    for (let i = 1; i < Math.ceil(batchSize / 40) + 1; i++) {
+      
+      let limit = batchSize - ((i-1)*40);
+      if (limit > 40) {
+        limit = 40;
+      }
+
       const promise = fetch(
-        `https://api.ship24.com/public/v1/trackers?page=${i}&limit=${batchSize}`,
+        `https://api.ship24.com/public/v1/trackers?page=${i}&limit=${limit}`,
         {
           method: "GET",
           headers: {
@@ -97,7 +103,10 @@ export default function ParcelDashboard() {
         }
       )
         .then((response) => response.json())
-        .then((data) => data.data.trackers)
+        .then((data) => {
+          console.log(data.data.trackers.length);
+          return data.data.trackers;
+        })
         .catch((error) => console.error(error));
 
       myPromise = promise;
