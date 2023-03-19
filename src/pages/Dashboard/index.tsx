@@ -6,6 +6,7 @@ import Filter from "./Filter";
 import Login from "./Login";
 import Updates from "./Updates";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import Table from "./Table";
 
 const stageMap: { [key: string]: string } = {
   All: "all",
@@ -202,41 +203,7 @@ export default function Dashboard() {
           className="border border-stone-400 rounded-md form-input w-full text-black bg-white"
         ></input>
       </label>
-      <table id="parcel-stack" className="w-11/12 mx-auto mt-5">
-        <thead id="parcel-stack-header" className="text-black border-stone-300">
-          <tr>
-            <th className="border border-stone-300">Tracking Number</th>
-            <th className="border border-stone-300">Status</th>
-            <th className="border border-stone-300">Origin</th>
-            <th className="border border-stone-300">Destination</th>
-            <th className="border border-stone-300">Courier</th>
-          </tr>
-        </thead>
-        <tbody className="text-black">
-          {stage === "all"
-            ? parcels.filter((parcel) => {
-                if (parcel != null) {
-                  if (React.isValidElement(parcel)) {
-                    return parcel.props.children[0].props.children.includes(
-                      searchText
-                    );
-                  }
-                }
-              })
-            : parcels.filter((parcel) => {
-                if (parcel != null) {
-                  if (React.isValidElement(parcel)) {
-                    return (
-                      parcel.props.children[1].props.children === stage &&
-                      parcel.props.children[0].props.children.includes(
-                        searchText
-                      )
-                    );
-                  }
-                }
-              })}
-        </tbody>
-      </table>
+      <Table stage={stage} parcels={parcels} searchText={searchText} />
       <div className="mt-2 m-auto flex justify-center">
         <span
           onClick={loadThreeMore}
