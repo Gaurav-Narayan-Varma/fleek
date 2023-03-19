@@ -10,7 +10,7 @@ import ContactRateChart from "./ContactRateChart";
 import TouchesPerTicketChart from "./TouchesPerTicket";
 import RevenueTimeChart from "./RevenueTimeChart";
 
-export default function ChartsAnalysis() {
+export default function Charts() {
   return (
     <section
       id="page-container"

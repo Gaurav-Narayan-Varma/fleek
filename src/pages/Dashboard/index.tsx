@@ -19,7 +19,7 @@ const stageMap: { [key: string]: string } = {
   Exception: "exception",
 };
 
-export default function ParcelDashboard() {
+export default function Dashboard() {
   const [parcels, setParcels] = useState<React.ReactNode[]>([]);
   const [stage, setStage] = useState<string>("all");
   const [isParcelClicked, setIsParcelClicked] = useState<boolean>(false);
