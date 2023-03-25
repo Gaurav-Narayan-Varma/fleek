@@ -17,7 +17,9 @@ export default function Charts() {
       className="flex flex-col bg-gray-50 w-screen pt-12 px-6"
     >
       <div id="table-contents" className="h-auto mb-96">
-        <h1 className="text-black font-bold mb-4">Table of Contents</h1>
+        <h1 className="text-black font-bold mb-4">
+          Table of Contents (click sections to explore!👇)
+        </h1>
         <ul className="pl-4 mb-6">
           <li className="mb-2 text-black inline-block transition ease-in-out delay-50">
             🚚 Fulfillment
