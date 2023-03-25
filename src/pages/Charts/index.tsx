@@ -19,13 +19,13 @@ export default function Charts() {
       <div id="table-contents" className="h-auto mb-96">
         <h1 className="text-black font-bold mb-4">Table of Contents</h1>
         <ul className="pl-4 mb-6">
-          <li className="mb-2 text-blue underline inline-block transition ease-in-out delay-50">
+          <li className="mb-2 text-black inline-block transition ease-in-out delay-50">
             🚚 Fulfillment
           </li>
           <br></br>
           <li className="ml-6 mb-2 inline-block transition ease-in-out delay-50">
             <a
-              className="w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8"
+              className="w-full hover:bg-zinc-800 text-blue-600 underline hover:text-white h-5 mb-8"
               href="#fulfill-delivery"
             >
               Understanding time to fulfill and deliver orders
@@ -34,7 +34,7 @@ export default function Charts() {
           <br></br>
           <li className="ml-6 mb-2 inline-block mr-80 transition ease-in-out delay-50">
             <a
-              className="w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8"
+              className="w-full hover:bg-zinc-800 text-blue-600 underline hover:text-white h-5 mb-8"
               href="#stages"
             >
               Understanding end to end delivery times
@@ -43,7 +43,7 @@ export default function Charts() {
           <br></br>
           <li className="ml-6 mb-2 inline-block mr-80 transition ease-in-out delay-50">
             <a
-              className="w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8"
+              className="w-full hover:bg-zinc-800 text-blue-600 underline hover:text-white h-5 mb-8"
               href="#market-size"
             >
               Understanding market size
@@ -56,7 +56,7 @@ export default function Charts() {
           <br></br>
           <li className="ml-6 mb-2 inline-block transition ease-in-out delay-50">
             <a
-              className="w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8"
+              className="w-full hover:bg-zinc-800 text-blue-600 underline hover:text-white h-5 mb-8"
               href="#contact-rate"
             >
               Understanding contact rate
@@ -65,7 +65,7 @@ export default function Charts() {
           <br></br>
           <li className="ml-6 mb-2 inline-block transition ease-in-out delay-50">
             <a
-              className="w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8"
+              className="w-full hover:bg-zinc-800 text-blue-600 underline hover:text-white h-5 mb-8"
               href="#turn-around-time"
             >
               Understanding turn around time
@@ -74,7 +74,7 @@ export default function Charts() {
           <br></br>
           <li className="ml-6 mb-2 inline-block transition ease-in-out delay-50">
             <a
-              className="w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8"
+              className="w-full hover:bg-zinc-800 text-blue-600 underline hover:text-white h-5 mb-8"
               href="#touches-per-ticket"
             >
               Understanding touches per ticket
@@ -87,7 +87,7 @@ export default function Charts() {
           <br></br>
           <li className="ml-6 mb-2 inline-block transition ease-in-out delay-50">
             <a
-              className="w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8"
+              className="w-full hover:bg-zinc-800 text-blue-600 underline hover:text-white h-5 mb-8"
               href="#fulfill-dist"
             >
               Appendix A: Time to Fulfillment Distribution
@@ -96,7 +96,7 @@ export default function Charts() {
           <br></br>
           <li className="ml-6 mb-2 inline-block transition ease-in-out delay-50">
             <a
-              className="w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8"
+              className="w-full hover:bg-zinc-800 text-blue-600 underline hover:text-white h-5 mb-8"
               href="#delivery-dist"
             >
               Appendix B: Time to Deliver Distribution
@@ -105,7 +105,7 @@ export default function Charts() {
           <br></br>
           <li className="ml-6 mb-2 inline-block transition ease-in-out delay-50">
             <a
-              className="w-full hover:bg-zinc-800 text-black hover:text-white h-5 mb-8"
+              className="w-full hover:bg-zinc-800 text-blue-600 underline hover:text-white h-5 mb-8"
               href="#orders-time-granular"
             >
               Appendix C: Orders over Time Granular View
