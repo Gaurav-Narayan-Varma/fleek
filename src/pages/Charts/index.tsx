@@ -18,9 +18,8 @@ export default function Charts() {
     >
       <div id="table-contents" className="h-auto mb-96">
         <h1 className="text-black font-bold mb-4">Table of Contents</h1>
-        <p className="text-black">click sections to explore!👇</p>
         <ul className="pl-4 mb-6">
-          <li className="mb-2 text-black inline-block transition ease-in-out delay-50">
+          <li className="mb-2 text-blue underline inline-block transition ease-in-out delay-50">
             🚚 Fulfillment
           </li>
           <br></br>
